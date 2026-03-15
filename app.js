@@ -74,6 +74,58 @@ function getDoi(work) {
   return "#";
 }
 
+/* ── Progress display ── */
+function updateProgress(name, status, count, errMsg) {
+  var log = document.getElementById("progress-log");
+  if (!log) return;
+  var id = "prog-" + name.replace(/[^a-zA-Z]/g, "");
+  var el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement("div");
+    el.id = id;
+    el.className = "progress-item";
+    log.appendChild(el);
+  }
+  if (status === "loading") {
+    el.innerHTML = '<span class="mini-spin"></span> ' + escapeHtml(name) + '...';
+  } else if (status === "done") {
+    el.innerHTML = '<span class="prog-ok">&#10003;</span> ' + escapeHtml(name) + ' &mdash; ' + count + ' papers';
+    el.className = "progress-item done";
+  } else {
+    el.innerHTML = '<span class="prog-err">&#10007;</span> ' + escapeHtml(name) + ' &mdash; ' + escapeHtml(errMsg || "failed");
+    el.className = "progress-item err";
+  }
+}
+
+/* ── Fetch with timeout ── */
+function fetchWithTimeout(url, ms) {
+  return new Promise(function (resolve, reject) {
+    var timer = setTimeout(function () { reject(new Error("timeout")); }, ms);
+    fetch(url).then(function (r) {
+      clearTimeout(timer);
+      resolve(r);
+    }).catch(function (err) {
+      clearTimeout(timer);
+      reject(err);
+    });
+  });
+}
+
+function parseResults(data, meta) {
+  return (data.results || []).map(function (w) {
+    return {
+      title: w.title || "Untitled",
+      authors: formatAuthors(w.authorships),
+      abstract: reconstructAbstract(w.abstract_inverted_index),
+      url: getDoi(w),
+      date: w.publication_date || "",
+      source: meta.key,
+      sourceName: meta.name,
+      badge: meta.badge
+    };
+  });
+}
+
 /* ── Fetch from OpenAlex ── */
 function fetchJournal(source) {
   var fromDate = daysAgoISO(DAYS_BACK);
@@ -84,23 +136,18 @@ function fetchJournal(source) {
     "&per_page=" + PER_SOURCE +
     "&mailto=ms.rks2001@gmail.com";
 
-  return fetch(url)
+  updateProgress(source.name, "loading");
+  return fetchWithTimeout(url, 10000)
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      return (data.results || []).map(function (w) {
-        return {
-          title: w.title || "Untitled",
-          authors: formatAuthors(w.authorships),
-          abstract: reconstructAbstract(w.abstract_inverted_index),
-          url: getDoi(w),
-          date: w.publication_date || "",
-          source: source.key,
-          sourceName: source.name,
-          badge: source.badge
-        };
-      });
+      var papers = parseResults(data, source);
+      updateProgress(source.name, "done", papers.length);
+      return papers;
     })
-    .catch(function () { return []; });
+    .catch(function (err) {
+      updateProgress(source.name, "error", 0, err.message);
+      return [];
+    });
 }
 
 function fetchArxiv(search) {
@@ -112,23 +159,18 @@ function fetchArxiv(search) {
     "&per_page=" + PER_SOURCE +
     "&mailto=ms.rks2001@gmail.com";
 
-  return fetch(url)
+  updateProgress(search.name, "loading");
+  return fetchWithTimeout(url, 10000)
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      return (data.results || []).map(function (w) {
-        return {
-          title: w.title || "Untitled",
-          authors: formatAuthors(w.authorships),
-          abstract: reconstructAbstract(w.abstract_inverted_index),
-          url: getDoi(w),
-          date: w.publication_date || "",
-          source: search.key,
-          sourceName: search.name,
-          badge: search.badge
-        };
-      });
+      var papers = parseResults(data, search);
+      updateProgress(search.name, "done", papers.length);
+      return papers;
     })
-    .catch(function () { return []; });
+    .catch(function (err) {
+      updateProgress(search.name, "error", 0, err.message);
+      return [];
+    });
 }
 
 /* ── Render ── */
