@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Paper Tracker | FSI · VOF · ML-for-CFD</title>
+  <title>Paper Tracker | FSI · VOF · ML-for-CFD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,81 +15,68 @@
 
     <!-- Hero -->
     <header class="hero">
-      <h1>Daily Paper Tracker</h1>
-      <p class="muted">FSI &middot; Multiphase VOF &middot; ML-for-CFD &mdash; curated for PhD research</p>
+      <div class="hero-content">
+        <h1>Paper Tracker</h1>
+        <p class="subtitle">FSI &middot; Multiphase VOF &middot; ML-for-CFD</p>
+        <p class="date-line" id="date-line"></p>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat">
+          <span class="stat-num" id="stat-total">--</span>
+          <span class="stat-label">papers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="stat-sources">7</span>
+          <span class="stat-label">sources</span>
+        </div>
+      </div>
     </header>
 
-    <!-- Source Setup Links -->
-    <section class="card">
-      <h2>Source Setup (one-by-one)</h2>
-      <p class="muted">Set up alerts from each source. Click a link, create the alert, come back.</p>
-      <div class="source-grid">
-        <a class="source-link" href="https://scholar.google.com/scholar_alerts" target="_blank" rel="noopener">
-          <span class="source-icon">&#128269;</span>
-          <span>Google Scholar Alerts</span>
-        </a>
-        <a class="source-link" href="https://www.sciencedirect.com/journal/journal-of-computational-physics" target="_blank" rel="noopener">
-          <span class="source-icon">&#128196;</span>
-          <span>J. Computational Physics</span>
-        </a>
-        <a class="source-link" href="https://www.sciencedirect.com/journal/computers-and-fluids" target="_blank" rel="noopener">
-          <span class="source-icon">&#128167;</span>
-          <span>Computers &amp; Fluids</span>
-        </a>
-        <a class="source-link" href="https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering" target="_blank" rel="noopener">
-          <span class="source-icon">&#9881;</span>
-          <span>CMAME</span>
-        </a>
-        <a class="source-link" href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics" target="_blank" rel="noopener">
-          <span class="source-icon">&#127754;</span>
-          <span>J. Fluid Mechanics</span>
-        </a>
-        <a class="source-link" href="https://pubs.aip.org/aip/pof" target="_blank" rel="noopener">
-          <span class="source-icon">&#128300;</span>
-          <span>Physics of Fluids</span>
-        </a>
-        <a class="source-link" href="https://arxiv.org/list/physics.flu-dyn/new" target="_blank" rel="noopener">
-          <span class="source-icon">&#128225;</span>
-          <span>arXiv physics.flu-dyn</span>
-        </a>
-        <a class="source-link" href="https://arxiv.org/list/cs.LG/new" target="_blank" rel="noopener">
-          <span class="source-icon">&#129302;</span>
-          <span>arXiv cs.LG</span>
-        </a>
+    <!-- Source Filter Tabs -->
+    <nav class="tabs" id="source-tabs">
+      <button class="tab active" data-source="all">All</button>
+    </nav>
+
+    <!-- Papers Feed -->
+    <main id="feed">
+      <div class="loading-state" id="global-loader">
+        <div class="spinner"></div>
+        <p>Fetching latest papers...</p>
+      </div>
+    </main>
+
+    <!-- Manual Add (collapsed) -->
+    <section class="card collapsible">
+      <button class="collapse-toggle" id="add-toggle">+ Add Paper Manually</button>
+      <div class="collapse-body" id="add-body">
+        <form id="paper-form">
+          <input type="text" id="paper-title" placeholder="Paper title" required>
+          <input type="text" id="paper-authors" placeholder="Authors (e.g. Smith et al.)">
+          <input type="url"  id="paper-link" placeholder="Link (https://...)">
+          <select id="paper-topic">
+            <option value="FSI">FSI</option>
+            <option value="VOF">VOF</option>
+            <option value="ML-CFD">ML-for-CFD</option>
+            <option value="Contact Line">Contact Line</option>
+            <option value="Immersed Boundary">Immersed Boundary</option>
+            <option value="Other">Other</option>
+          </select>
+          <button type="submit">Save Paper</button>
+        </form>
       </div>
     </section>
 
-    <!-- Recommended Search Queries -->
-    <section class="card">
-      <h2>Recommended Search Queries</h2>
-      <p class="muted">Click to copy a query, then paste it into Google Scholar Alerts.</p>
-      <div id="query-chips" class="chip-row"></div>
+    <!-- Saved Papers -->
+    <section class="card" id="saved-section" style="display:none">
+      <h2>My Saved Papers</h2>
+      <div id="paper-list"></div>
     </section>
 
-    <!-- Add a Paper -->
-    <section class="card">
-      <h2>Add Paper of the Day</h2>
-      <form id="paper-form">
-        <input type="text" id="paper-title" placeholder="Paper title" required>
-        <input type="text" id="paper-authors" placeholder="Authors (e.g. Smith et al.)">
-        <input type="url"  id="paper-link" placeholder="Link (https://...)">
-        <select id="paper-topic">
-          <option value="FSI">FSI</option>
-          <option value="VOF">VOF</option>
-          <option value="ML-CFD">ML-for-CFD</option>
-          <option value="Contact Line">Contact Line</option>
-          <option value="Immersed Boundary">Immersed Boundary</option>
-          <option value="Other">Other</option>
-        </select>
-        <button type="submit">Save Paper</button>
-      </form>
-    </section>
-
-    <!-- Paper List -->
-    <section class="card">
-      <h2>Saved Papers</h2>
-      <div id="paper-list">
-        <p class="muted">No papers saved yet. Use the form above to add your first one.</p>
+    <!-- Search Queries -->
+    <section class="card collapsible">
+      <button class="collapse-toggle" id="queries-toggle">Scholar Alert Queries (click to copy)</button>
+      <div class="collapse-body" id="queries-body">
+        <div id="query-chips" class="chip-row"></div>
       </div>
     </section>
 
