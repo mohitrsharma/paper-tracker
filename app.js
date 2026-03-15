@@ -4,6 +4,9 @@
    Fluids, Int J Numer Methods Fluids, arXiv (fluid-dyn + cs.LG)
    ============================================================ */
 
+/* Each source gets a focused search query for FSI, multiphase, VOF, ML+CFD */
+var SEARCH_TOPICS = "fluid-structure interaction OR multiphase OR volume of fluid OR VOF OR PLIC OR interface reconstruction OR immersed boundary OR contact line OR two-phase OR machine learning CFD OR neural operator";
+
 var SOURCES = [
   { key: "jcp",   name: "JCP",                   issn: "0021-9991", badge: "badge-jcp" },
   { key: "cf",    name: "Computers & Fluids",     issn: "0045-7930", badge: "badge-cf" },
@@ -14,13 +17,13 @@ var SOURCES = [
 ];
 
 var ARXIV_SEARCHES = [
-  { key: "arxiv-fluids", name: "arXiv Fluids",  query: "multiphase OR VOF OR fluid-structure", badge: "badge-arxiv" },
-  { key: "arxiv-ml",     name: "arXiv ML+CFD",  query: "neural operator OR physics-informed OR machine learning CFD", badge: "badge-arxiv" }
+  { key: "arxiv-fsi",  name: "arXiv FSI+Multiphase", query: "fluid-structure interaction OR multiphase flow OR volume of fluid OR VOF OR immersed boundary OR two-phase OR interface reconstruction OR contact line", badge: "badge-arxiv" },
+  { key: "arxiv-ml",   name: "arXiv ML+VOF",         query: "machine learning volume of fluid OR neural operator multiphase OR physics-informed multiphase OR deep learning CFD two-phase", badge: "badge-arxiv" }
 ];
 
 var OPENALEX_BASE = "https://api.openalex.org/works";
-var DAYS_BACK = 14;
-var PER_SOURCE = 8;
+var DAYS_BACK = 60;
+var PER_SOURCE = 15;
 
 /* ── State ── */
 var allPapers = [];
@@ -130,9 +133,10 @@ function parseResults(data, meta) {
 function fetchJournal(source) {
   var fromDate = daysAgoISO(DAYS_BACK);
   var url = OPENALEX_BASE +
-    "?filter=primary_location.source.issn:" + source.issn +
+    "?search=" + encodeURIComponent(SEARCH_TOPICS) +
+    "&filter=primary_location.source.issn:" + source.issn +
     ",from_publication_date:" + fromDate +
-    "&sort=publication_date:desc" +
+    "&sort=relevance_score:desc" +
     "&per_page=" + PER_SOURCE +
     "&mailto=ms.rks2001@gmail.com";
 
