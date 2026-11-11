@@ -1,0 +1,231 @@
+{
+  "generated": "2026-11-11",
+  "window": "Papers published since mid-August 2026",
+  "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them.",
+  "items": [
+    {
+      "title": "A QSVT-Based Quantum Jacobi Algorithm for Linear Systems with Application to the Poisson Equation",
+      "authors": "L. M. Piskol, T. Grahs, S. Langer",
+      "venue": "arXiv preprint",
+      "date": "2026-09-21",
+      "url": "https://doi.org/10.48550/arxiv.2609.24266",
+      "tags": ["Quantum", "Pressure Poisson"],
+      "relevance": 5,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Most quantum linear solvers try to invert the matrix directly, while CFD codes rely on iterative methods such as Jacobi.",
+        "method": "The Jacobi iteration is written as a polynomial of a block-encoded operator using quantum singular value transformation (QSVT), and tested on 1D and 2D Poisson problems — including the pressure Poisson equation inside Chorin's projection method for lid-driven cavity flow.",
+        "result": "The number of ancilla qubits stays constant as iterations increase; circuit depth grows linearly with the number of Jacobi iterations."
+      },
+      "why": "The closest paper to your quantum pressure-solver study: it uses exactly Chorin's projection step. Compare its iteration-count argument with your condition-number numbers — Jacobi needs O(κ) iterations, so your multiphase κ would make the circuit very deep."
+    },
+    {
+      "title": "Quantum Algorithms for Computational Fluid Dynamics",
+      "authors": "M. G. Cecile, N.-L. van Hülst, T. Hashizume et al.",
+      "venue": "arXiv preprint",
+      "date": "2026-09-30",
+      "url": "https://doi.org/10.48550/arxiv.2609.39962",
+      "tags": ["Quantum", "Review"],
+      "relevance": 5,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Which quantum approaches could realistically solve the PDEs behind CFD?",
+        "method": "Reviews quantum linear solvers (HHL to QSVT), Hamiltonian simulation, quantum lattice Boltzmann and tensor networks, and tests them on benchmark PDEs such as Poisson and reaction–diffusion.",
+        "result": "Any advantage is strongly problem-dependent, governed above all by the condition number and the cost of state preparation."
+      },
+      "why": "A current review to cite in the quantum section of your Poisson note, and a good map of methods beyond HHL/VQLS."
+    },
+    {
+      "title": "Bubble detachment from solid surfaces induced by impacting particles",
+      "authors": "X. Chen, X. Li, B. Yin et al.",
+      "venue": "Journal of Fluid Mechanics",
+      "date": "2026-09-07",
+      "url": "https://doi.org/10.1017/jfm.2026.11990",
+      "tags": ["VOF", "Immersed boundary", "Contact line"],
+      "relevance": 5,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "How does a particle striking a wall-attached bubble make it detach?",
+        "method": "A coupled VOF/level-set method combined with an immersed boundary method and discrete element method, extended to an axisymmetric configuration.",
+        "result": "Three detachment modes are identified: capillary-wave, bubble-rebound and particle-rebound."
+      },
+      "why": "Combines the three ingredients of your thesis — VOF interface, immersed solid, and a wall-attached interface — in a JFM paper. Check how they treat the contact angle on the wall while the particle moves."
+    },
+    {
+      "title": "A three-dimensional numerical scheme for modeling contact line pinning on heterogeneous substrates",
+      "authors": "S. K. Nayak, A. Bhattacharya, P. M. Nair",
+      "venue": "Computer Physics Communications",
+      "date": "2026-10-13",
+      "url": "https://doi.org/10.1016/j.cpc.2026.110462",
+      "tags": ["Contact line", "Numerics"],
+      "relevance": 5,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a 3D numerical scheme for contact-line pinning on chemically or physically heterogeneous walls.",
+        "result": "Open the paper to see results."
+      },
+      "why": "Pinning and hysteresis are the natural next step beyond a single equilibrium contact angle in your three-phase work. Worth reading the method section."
+    },
+    {
+      "title": "A conservative cut-cell/front-tracking method for interface-resolved two-phase flow simulations",
+      "authors": "D. Dupuy, A. Toutant, A. du Cluzeau",
+      "venue": "Journal of Computational Physics",
+      "date": "2026-09-23",
+      "url": "https://doi.org/10.1016/j.jcp.2026.115390",
+      "tags": ["Multiphase", "Interface method"],
+      "relevance": 4,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "One-field models smear the interface, and front tracking needs a conservative way to represent the interface on a fixed grid.",
+        "method": "Lagrangian front-tracking markers combined with a cut-cell finite-volume discretisation on a staggered Cartesian grid, a projection method, and volume-preserving mesh motion for mass conservation.",
+        "result": "Stable and more accurate than a one-field/front-tracking baseline on static and oscillating droplets, bubble arrays, a rising bubble and zig-zagging bubbles."
+      },
+      "why": "A strong competitor to VOF/PLIC on mass conservation. Useful for the 'why VOF?' question at your defense — know its pros and cons."
+    },
+    {
+      "title": "A multicolor coupled level set and volume-of-fluid framework for controlled coalescence of drops and bubbles in two-phase flow simulations",
+      "authors": "S. Basak, U. C. Bitencourt, G. B. Deane et al.",
+      "venue": "Journal of Computational Physics",
+      "date": "2026-10-29",
+      "url": "https://doi.org/10.1016/j.jcp.2026.115529",
+      "tags": ["VOF", "Level set"],
+      "relevance": 4,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: several colour functions (one per drop or bubble) with coupled level set and VOF, so that numerical coalescence can be controlled.",
+        "result": "Open the paper to see results."
+      },
+      "why": "Multiple colour functions are close to how you handle three phases. See how they reconstruct interfaces when two colours share a cell."
+    },
+    {
+      "title": "Towards Rapid Prototyping of Spray Injectors: A Regime-Agnostic Neural Operator Surrogate for Gas-Liquid Interface Evolution",
+      "authors": "P. Guida, P.-H. Chen, H. G. Im et al.",
+      "venue": "arXiv preprint",
+      "date": "2026-08-18",
+      "url": "https://doi.org/10.48550/arxiv.2608.17825",
+      "tags": ["ML for CFD", "VOF"],
+      "relevance": 4,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Spray interfaces are hard to measure and expensive to simulate at fine scales.",
+        "method": "A boundary-conditioned Fourier Neural Operator predicts the evolution of a signed-distance function, trained on 2D VOF simulations, with optional physics-based regularizers.",
+        "result": "The signed-distance FNO keeps the interface sharper than a volume-fraction FNO but is still behind a U-Net; adding physics terms barely changed forecast error."
+      },
+      "why": "An honest negative-ish result on physics regularization — compare with your Young's-equation loss for PLIC-Net. Also note: predicting α directly loses sharpness, which supports your choice to learn local geometry instead."
+    },
+    {
+      "title": "Immersed boundary method of ghost cells for modelling flows in complex geometries with thermal effects and fluid–structure interaction",
+      "authors": "J. E. F. Martini, A. da Silveira Neto",
+      "venue": "Journal of Computational Physics",
+      "date": "2026-11-01",
+      "url": "https://doi.org/10.1016/j.jcp.2026.115573",
+      "tags": ["FSI", "Immersed boundary"],
+      "relevance": 4,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Simulating flow, heat transfer and FSI in complex geometries with a sharp-interface method.",
+        "method": "A 3D ghost-cell immersed boundary method in a parallel adaptive-mesh-refinement solver, with LES for high Reynolds numbers.",
+        "result": "Verified on several benchmarks, including a sphere at Re = 1000 and 5000; FSI natural frequencies for five vibration modes match the reference."
+      },
+      "why": "A sharp-interface (ghost-cell) alternative to your group's fictitious-domain approach. Good for the literature section of your FSI chapter."
+    },
+    {
+      "title": "An unconditionally stable explicit Robin–Robin partitioned scheme for fluid–structure interaction",
+      "authors": "S. Guo, P. Lin, Y. Wang",
+      "venue": "Journal of Computational Physics",
+      "date": "2026-10-30",
+      "url": "https://doi.org/10.1016/j.jcp.2026.115545",
+      "tags": ["FSI", "Coupling"],
+      "relevance": 4,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: an explicit partitioned FSI coupling with Robin interface conditions, claimed unconditionally stable.",
+        "result": "Open the paper to see results."
+      },
+      "why": "Relevant to your earlier FSI-coupling study: explicit partitioned schemes usually suffer from the added-mass instability. Robin–Robin coupling is one of the standard cures."
+    },
+    {
+      "title": "Self-similar effective-to-apparent contact line length ratio in droplet friction on textured surfaces",
+      "authors": "Y. Jiang, C. Wei, B. Li et al.",
+      "venue": "Communications Physics",
+      "date": "2026-09-15",
+      "url": "https://doi.org/10.1038/s42005-026-02866-3",
+      "tags": ["Contact line", "Experiment"],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Droplet friction on textured superhydrophobic surfaces is hard to predict because the contact-line length that actually pins is poorly defined.",
+        "method": "Defines an effective-to-apparent contact-line length ratio and tests it with adhesion-force, contact-line and shape measurements on micropillar surfaces.",
+        "result": "The model predicts droplet friction across microstructure size, intrinsic wettability and droplet volume."
+      },
+      "why": "Experimental data on contact-line pinning — a possible validation target if you extend your model to textured walls."
+    },
+    {
+      "title": "Theory of the coalescence of two spherical liquid drops at early times",
+      "authors": "R. Brandão, J. Eggers, M. A. Fontelos",
+      "venue": "Journal of Fluid Mechanics",
+      "date": "2026-10-26",
+      "url": "https://doi.org/10.1017/jfm.2026.12189",
+      "tags": ["Theory", "Droplets"],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "The early-time dynamics of two equal drops merging under surface tension lack a full theory.",
+        "method": "Matched asymptotic expansions for the growth of the liquid bridge and the shape of the gap.",
+        "result": "Gives the bridge growth and gap shape as functions of the Ohnesorge number Oh = η/√(ργR)."
+      },
+      "why": "A clean analytical benchmark for any VOF code's coalescence behaviour — and an example of the inner/outer matching from today's classics."
+    },
+    {
+      "title": "Physics-informed neural networks for planar interface evaporation: forward, inverse, and parameterized modeling",
+      "authors": "T.-H. Phan, L. M. Pirnstill, F. Naderi et al.",
+      "venue": "Int. J. Heat and Mass Transfer",
+      "date": "2026-08-25",
+      "url": "https://doi.org/10.1016/j.ijheatmasstransfer.2026.129465",
+      "tags": ["ML for CFD", "VOF"],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Modelling a moving liquid–vapour evaporation interface with sharp gradients.",
+        "method": "PINNs solve a 1D unsteady Stefan problem coupled to a VOF transport equation, in forward, inverse and parameterized settings.",
+        "result": "The inverse setting recovers wall superheat, vapour conductivity and latent heat with errors below 7%, even with noisy data."
+      },
+      "why": "PINNs + VOF in 1D. Useful context for the 'ML for interfaces' landscape in your proposal."
+    },
+    {
+      "title": "Color-gradient lattice Boltzmann modeling of wetting boundary condition on curved solid boundaries",
+      "authors": "M. Bhattacharya, S. Dash, S. Agarwal et al.",
+      "venue": "Ind. Eng. Chem. Research",
+      "date": "2026-11-02",
+      "url": "https://doi.org/10.1021/acs.iecr.6c02798",
+      "tags": ["Contact angle", "LBM"],
+      "relevance": 3,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a wetting (contact-angle) boundary condition for curved solid walls in colour-gradient LBM.",
+        "result": "Open the paper to see results."
+      },
+      "why": "Imposing a contact angle on a curved solid is exactly your hemisphere and sphere test cases. Compare their approach with your PLIC-based treatment."
+    },
+    {
+      "title": "Towards high-density-ratio multiphase flow: surface tension adjustment in the three-dimensional cumulant lattice Boltzmann method",
+      "authors": "J. Kang, D. Wu",
+      "venue": "Journal of Statistical Physics",
+      "date": "2026-10-01",
+      "url": "https://doi.org/10.1007/s10955-026-03695-y",
+      "tags": ["Multiphase", "LBM"],
+      "relevance": 2,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Lattice Boltzmann multiphase methods struggle at high density ratios and produce spurious currents.",
+        "method": "A surface-tension adjustment for the 3D cumulant LBM.",
+        "result": "Reduced spurious currents and stable simulations at higher density ratios."
+      },
+      "why": "Shows how other communities attack the same density-ratio and parasitic-current problems that you face in the pressure solve."
+    }
+  ]
+}

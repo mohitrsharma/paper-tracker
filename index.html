@@ -1,90 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paper Tracker | FSI · VOF · ML-for-CFD</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- artifact:head -->
+<title>Daily Hour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Tiro+Devanagari+Sanskrit&display=swap">
+<link rel="stylesheet" href="styles.css">
+<!-- /artifact:head -->
 </head>
 <body>
-
-  <div class="container">
-
-    <!-- Hero -->
-    <header class="hero">
-      <div class="hero-content">
-        <h1>Paper Tracker</h1>
-        <p class="subtitle">FSI &middot; Multiphase VOF &middot; ML-for-CFD</p>
-        <p class="date-line" id="date-line"></p>
-      </div>
-      <div class="hero-stats" id="hero-stats">
-        <div class="stat">
-          <span class="stat-num" id="stat-total">--</span>
-          <span class="stat-label">papers</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num" id="stat-sources">7</span>
-          <span class="stat-label">sources</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- Source Filter Tabs -->
-    <nav class="tabs" id="source-tabs">
-      <button class="tab active" data-source="all">All</button>
-    </nav>
-
-    <!-- Papers Feed -->
-    <main id="feed">
-      <div id="global-loader">
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Fetching latest papers...</p>
-        </div>
-        <div id="progress-log" class="progress-log"></div>
-      </div>
-    </main>
-
-    <!-- Manual Add (collapsed) -->
-    <section class="card collapsible">
-      <button class="collapse-toggle" id="add-toggle">+ Add Paper Manually</button>
-      <div class="collapse-body" id="add-body">
-        <form id="paper-form">
-          <input type="text" id="paper-title" placeholder="Paper title" required>
-          <input type="text" id="paper-authors" placeholder="Authors (e.g. Smith et al.)">
-          <input type="url"  id="paper-link" placeholder="Link (https://...)">
-          <select id="paper-topic">
-            <option value="FSI">FSI</option>
-            <option value="VOF">VOF</option>
-            <option value="ML-CFD">ML-for-CFD</option>
-            <option value="Contact Line">Contact Line</option>
-            <option value="Immersed Boundary">Immersed Boundary</option>
-            <option value="Other">Other</option>
-          </select>
-          <button type="submit">Save Paper</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Saved Papers -->
-    <section class="card" id="saved-section" style="display:none">
-      <h2>My Saved Papers</h2>
-      <div id="paper-list"></div>
-    </section>
-
-    <!-- Search Queries -->
-    <section class="card collapsible">
-      <button class="collapse-toggle" id="queries-toggle">Scholar Alert Queries (click to copy)</button>
-      <div class="collapse-body" id="queries-body">
-        <div id="query-chips" class="chip-row"></div>
-      </div>
-    </section>
-
+<!-- artifact:body -->
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1>Daily Hour</h1>
+      <p class="sub">Papers · turbulence classics · śloka · speaking — one hour, every day.</p>
+    </div>
+    <div class="stats" aria-label="Progress">
+      <div><b id="stat-streak">0</b>day streak</div>
+      <div><b id="stat-total">0</b>hours done</div>
+      <div><b id="stat-day">1</b>of 28</div>
+    </div>
+  </header>
+  <div class="row" style="justify-content:space-between;padding-bottom:10px">
+    <div class="daynav">
+      <button id="prev-day" aria-label="Previous day">&larr;</button>
+      <span class="daylabel" id="day-label">Today</span>
+      <button id="next-day" aria-label="Next day">&rarr;</button>
+      <button id="today-btn" class="iconbtn" hidden>Back to today</button>
+    </div>
+    <span class="status" id="mode-status"></span>
   </div>
+</div>
 
-  <script src="app.js"></script>
+<div class="clock">
+  <div class="wrap clock-inner">
+    <div class="blocks" role="tablist" aria-label="Session blocks">
+      <button class="blk" data-k="research" data-min="25"><span class="fill"></span><span class="nm">Research radar</span><span class="mn">25 min</span></button>
+      <button class="blk" data-k="classic" data-min="15"><span class="fill"></span><span class="nm">Classic</span><span class="mn">15 min</span></button>
+      <button class="blk" data-k="philo" data-min="10"><span class="fill"></span><span class="nm">Śloka</span><span class="mn">10 min</span></button>
+      <button class="blk" data-k="speak" data-min="10"><span class="fill"></span><span class="nm">Speaking</span><span class="mn">10 min</span></button>
+    </div>
+    <div class="timer">
+      <span class="t" id="timer-t">25:00</span>
+      <button class="iconbtn primary" id="timer-btn">Start</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<main>
+
+  <!-- 1. Research radar -->
+  <section class="station" id="research">
+    <div class="st-head">
+      <h2>Research radar</h2><span class="mins">25 MIN</span>
+      <p class="hint">Read the first paper properly (about 12 minutes), then skim the next two. Everything is ranked for your topics: multiphase/VOF/PLIC, contact lines, FSI and immersed boundaries, pressure Poisson and quantum solvers, ML for interfaces.</p>
+    </div>
+    <div class="subtabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="today">Today's three</button>
+      <button role="tab" aria-selected="false" data-tab="all">Full radar</button>
+      <button role="tab" aria-selected="false" data-tab="live">Live search</button>
+      <button role="tab" aria-selected="false" data-tab="saved">Saved</button>
+    </div>
+    <div id="radar-today" class="papers"></div>
+    <div id="radar-all" class="papers" hidden></div>
+    <div id="radar-live" hidden>
+      <div class="card stack">
+        <p class="meta" style="margin:0">Searches OpenAlex directly for the last 60 days across JCP, J. Fluid Mech., Int. J. Multiphase Flow, Physics of Fluids, Computers &amp; Fluids, CMAME, Phys. Rev. Fluids and preprints. Titles and abstracts only, ranked by your topic keywords.</p>
+        <div class="row">
+          <select id="live-topic" aria-label="Topic">
+            <option value="contact line OR contact angle OR wetting">Contact line &amp; wetting</option>
+            <option value="volume of fluid OR VOF OR PLIC OR interface reconstruction">VOF &amp; interface reconstruction</option>
+            <option value="fluid-structure interaction OR immersed boundary OR fictitious domain">FSI &amp; immersed boundary</option>
+            <option value="pressure Poisson OR multigrid OR preconditioner multiphase">Pressure Poisson &amp; solvers</option>
+            <option value="quantum algorithm fluid OR quantum linear solver">Quantum for CFD</option>
+            <option value="neural operator OR machine learning multiphase OR deep learning interface">ML for multiphase</option>
+            <option value="turbulence">Turbulence (general)</option>
+          </select>
+          <button class="btn" id="live-go">Search</button>
+        </div>
+      </div>
+      <div id="live-out" class="more-list card" style="margin-top:12px" hidden></div>
+    </div>
+    <div id="radar-saved" hidden>
+      <div id="saved-list" class="more-list card"></div>
+      <details class="card" style="margin-top:12px">
+        <summary>Add a paper by hand</summary>
+        <form id="paper-form" class="form-grid" style="margin-top:12px">
+          <input class="full" type="text" id="pf-title" placeholder="Paper title" required>
+          <input type="text" id="pf-authors" placeholder="Authors (e.g. Popinet 2009)">
+          <input type="url" id="pf-link" placeholder="Link (https://…)">
+          <select id="pf-topic" aria-label="Topic">
+            <option>VOF / PLIC</option><option>Contact line</option><option>FSI</option>
+            <option>Pressure Poisson</option><option>Quantum</option><option>ML for CFD</option><option>Turbulence</option><option>Other</option>
+          </select>
+          <button class="btn" type="submit">Save paper</button>
+        </form>
+      </details>
+    </div>
+    <p class="meta" id="radar-note"></p>
+  </section>
+
+  <!-- 2. Classic -->
+  <section class="station" id="classic">
+    <div class="st-head">
+      <h2>Classic paper</h2><span class="mins">15 MIN</span>
+      <p class="hint">Read the idea, write the equation by hand once, then answer the recall question before revealing it.</p>
+    </div>
+    <article class="card classic stack" id="classic-card"></article>
+  </section>
+
+  <!-- 3. Philosophy -->
+  <section class="station" id="philo">
+    <div class="st-head">
+      <h2>Śloka of the day</h2><span class="mins">10 MIN</span>
+      <p class="hint">Gītā, Upaniṣads and Nyāya in rotation. Read the Devanāgarī aloud three times, then the meaning, then sit with the reflection.</p>
+    </div>
+    <article class="card verse stack" id="philo-card"></article>
+  </section>
+
+  <!-- 4. Speaking -->
+  <section class="station" id="speak">
+    <div class="st-head">
+      <h2>Speaking</h2><span class="mins">10 MIN</span>
+      <p class="hint">Two minutes: recite today's śloka. Then the prompt — speak for about two minutes, listen back or read the transcript, and check yourself against the list.</p>
+    </div>
+    <article class="card stack" id="speak-card"></article>
+  </section>
+
+  <!-- 5. Reflect -->
+  <section class="station" id="reflect">
+    <div class="st-head">
+      <h2>Close the hour</h2><span class="mins">2 MIN</span>
+    </div>
+    <div class="card stack">
+      <div class="two">
+        <div class="field"><label for="r-learned">One thing I learned today</label><textarea id="r-learned" placeholder="e.g. Kolmogorov scale from dimensions alone: η = (ν³/ε)^¼"></textarea></div>
+        <div class="field"><label for="r-action">One PhD action for tomorrow</label><textarea id="r-action" placeholder="e.g. Rerun the hemisphere case at 2× resolution and compare apparent contact angle"></textarea></div>
+      </div>
+      <div class="row">
+        <button class="iconbtn primary" id="complete-btn">Complete today's hour</button>
+        <span class="status" id="complete-status"></span>
+      </div>
+      <div class="row" style="gap:12px"><span class="eyebrow">Last 14 days</span><div class="week" id="week"></div></div>
+      <details><summary>Journal</summary><ul class="history" id="history" style="margin-top:8px"></ul></details>
+    </div>
+  </section>
+
+</main>
+<footer>
+  <p>Paper summaries are written by Claude from abstracts; open the paper before citing. Classic-paper citations and Sanskrit texts were checked when the curriculum was written. Śloka translations are plain renderings for study.</p>
+</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+  window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]] }, svg: { fontCache: "global" }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async id="mathjax-script"></script>
+<script src="content/classics.js"></script>
+<script src="content/philosophy.js"></script>
+<script src="content/speaking.js"></script>
+<script src="app.js"></script>
+<!-- /artifact:body -->
 </body>
 </html>
