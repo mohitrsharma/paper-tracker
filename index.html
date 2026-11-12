@@ -18,7 +18,7 @@
   <header class="masthead">
     <div>
       <h1>Daily Hour</h1>
-      <p class="sub">Papers · turbulence classics · śloka · speaking — one hour, every day.</p>
+      <p class="sub">Your field · new papers · turbulence classics · śloka · speaking — 75 minutes from 4:30 AM.</p>
     </div>
     <div class="stats" aria-label="Progress">
       <div><b id="stat-streak">0</b>day streak</div>
@@ -40,13 +40,14 @@
 <div class="clock">
   <div class="wrap clock-inner">
     <div class="blocks" role="tablist" aria-label="Session blocks">
-      <button class="blk" data-k="research" data-min="25"><span class="fill"></span><span class="nm">Research radar</span><span class="mn">25 min</span></button>
-      <button class="blk" data-k="classic" data-min="15"><span class="fill"></span><span class="nm">Classic</span><span class="mn">15 min</span></button>
-      <button class="blk" data-k="philo" data-min="10"><span class="fill"></span><span class="nm">Śloka</span><span class="mn">10 min</span></button>
-      <button class="blk" data-k="speak" data-min="10"><span class="fill"></span><span class="nm">Speaking</span><span class="mn">10 min</span></button>
+      <button class="blk" data-k="field" data-min="15"><span class="fill"></span><span class="nm"><span class="lg">Your field</span><span class="sh">Field</span></span><span class="mn">15 min</span></button>
+      <button class="blk" data-k="research" data-min="25"><span class="fill"></span><span class="nm"><span class="lg">Research radar</span><span class="sh">Papers</span></span><span class="mn">25 min</span></button>
+      <button class="blk" data-k="classic" data-min="15"><span class="fill"></span><span class="nm"><span class="lg">Classic</span><span class="sh">Classic</span></span><span class="mn">15 min</span></button>
+      <button class="blk" data-k="philo" data-min="10"><span class="fill"></span><span class="nm"><span class="lg">Śloka</span><span class="sh">Śloka</span></span><span class="mn">10 min</span></button>
+      <button class="blk" data-k="speak" data-min="10"><span class="fill"></span><span class="nm"><span class="lg">Mock defense</span><span class="sh">Defense</span></span><span class="mn">10 min</span></button>
     </div>
     <div class="timer">
-      <span class="t" id="timer-t">25:00</span>
+      <span class="t" id="timer-t">15:00</span>
       <button class="iconbtn primary" id="timer-btn">Start</button>
     </div>
   </div>
@@ -54,6 +55,15 @@
 
 <div class="wrap">
 <main>
+
+  <!-- 0. Master your field -->
+  <section class="station" id="field">
+    <div class="st-head">
+      <h2>Master your field</h2><span class="mins">15 MIN</span>
+      <p class="hint">One paper from your proposal review each day. Read the summary, copy the equations by hand and say what each term means, then answer the committee question aloud before opening the outline.</p>
+    </div>
+    <article class="card field-card stack" id="field-card"></article>
+  </section>
 
   <!-- 1. Research radar -->
   <section class="station" id="research">
@@ -127,8 +137,8 @@
   <!-- 4. Speaking -->
   <section class="station" id="speak">
     <div class="st-head">
-      <h2>Speaking</h2><span class="mins">10 MIN</span>
-      <p class="hint">Two minutes: recite today's śloka. Then the prompt — speak for about two minutes, listen back or read the transcript, and check yourself against the list.</p>
+      <h2>Mock defense</h2><span class="mins">10 MIN</span>
+      <p class="hint">Recite today's śloka once to warm up your voice. Then hear the committee question, answer aloud for one to two minutes, and get examiner feedback with a follow-up question.</p>
     </div>
     <article class="card stack" id="speak-card"></article>
   </section>
@@ -152,6 +162,19 @@
     </div>
   </section>
 
+  <!-- Coach notes -->
+  <section class="station" id="coach">
+    <div class="st-head"><h2>Coach notes</h2></div>
+    <div class="card stack">
+      <div class="row" style="gap:12px;align-items:flex-end">
+        <div><span class="eyebrow">Your speaking, last 7 sessions</span><div class="spark" id="speech-trend"></div></div>
+        <p class="meta" style="margin:0" id="speech-summary">Your pace and filler words appear here after your first spoken answer.</p>
+      </div>
+      <details open><summary>Speaking tips</summary><ol class="tips" id="tips-speaking"></ol></details>
+      <details><summary>Daily growth tips</summary><ol class="tips" id="tips-growth"></ol></details>
+    </div>
+  </section>
+
 </main>
 <footer>
   <p>Paper summaries are written by Claude from abstracts; open the paper before citing. Classic-paper citations and Sanskrit texts were checked when the curriculum was written. Śloka translations are plain renderings for study.</p>
@@ -163,6 +186,7 @@
   window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]] }, svg: { fontCache: "global" }, startup: { typeset: false } };
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async id="mathjax-script"></script>
+<script src="content/field.js"></script>
 <script src="content/classics.js"></script>
 <script src="content/philosophy.js"></script>
 <script src="content/speaking.js"></script>

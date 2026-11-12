@@ -13,12 +13,13 @@
   var START = "2026-11-11";           // Day 1 of the 28-day cycle
   var CYCLE = 28;
   var BLOCKS = [
+    { k: "field", min: 15, label: "Your field" },
     { k: "research", min: 25, label: "Research radar" },
     { k: "classic", min: 15, label: "Classic" },
     { k: "philo", min: 10, label: "Śloka" },
-    { k: "speak", min: 10, label: "Speaking" }
+    { k: "speak", min: 10, label: "Mock defense" }
   ];
-  var PROFILE = "Mohit is a PhD student (Engineering and Applied Science, UMass Dartmouth, advisor Dr. Mehdi Raessi) working on computational multiphase flow: VOF/PLIC interface reconstruction, three-phase contact-line dynamics and contact angles, the fictitious-domain FSI method of Pathak & Raessi, ML acceleration of interface reconstruction (PLIC-Net, TorchScript models called from a C++ solver), the variable-density pressure Poisson solver and its condition number, and quantum linear solvers (HHL, VQLS) for the pressure equation. He also validates cases in OpenFOAM. He is preparing his proposal defense and aiming for faculty positions.";
+  var PROFILE = "Mohit is a PhD student (Engineering and Applied Science, UMass Dartmouth, advisor Dr. Mehdi Raessi) working on computational multiphase flow: VOF/PLIC interface reconstruction, three-phase contact-line dynamics and contact angles, the fictitious-domain FSI method of Pathak & Raessi, ML acceleration of interface reconstruction (PLIC-Net, TorchScript models called from a C++ solver), the variable-density pressure Poisson solver and its condition number, and quantum linear solvers (HHL, VQLS) for the pressure equation. He also validates cases in OpenFOAM. His proposal defense (within two weeks of 11 Nov 2026) is a review titled “Simulating moving solids that interact with two-phase interfaces”: FSI grids (conforming/ALE, immersed methods on both sides or fluid side only, overset) and contact-angle methods for water entry with wettability. Gap: no fixed-grid method imposes a contact angle other than 90° on a solid moving through the grid while conserving liquid volume at the water–air density ratio. His solver (Ghasemi 2014, Pathak & Raessi 2016: momentum projection + geometric VOF) leaves an air film in water entry. Proposed remedies: contact angle via the PLIC plane orientation and curvature, rigid velocity restricted/weighted by solid fraction, conservative hand-over of covered cells; validation against Duez 2007 U*, Do-Quang & Amberg 2009, Ding 2015, Kintea 2016. He is aiming for faculty positions and is working hard to improve his spoken English and confidence.";
   var KEYWORDS = [
     ["contact line", 5], ["contact angle", 5], ["wetting", 3], ["volume of fluid", 5], ["vof", 4], ["plic", 5],
     ["interface reconstruction", 5], ["three-phase", 4], ["multiphase", 3], ["two-phase", 3], ["droplet", 2], ["bubble", 2],
@@ -58,7 +59,7 @@
   /* ── state ── */
   var TODAY = isoLocal(new Date());
   var viewDate = TODAY;
-  var state = { saved: [], read: {}, log: {}, blocks: {}, drafts: {}, checks: {} };
+  var state = { saved: [], read: {}, log: {}, blocks: {}, drafts: {}, checks: {}, speech: {} };
   var LS_KEY = "dailyHour_v1";
 
   function loadLocal() {
@@ -87,7 +88,7 @@
   function setStatus(s) { $("mode-status").textContent = s; }
 
   /* ── session clock ── */
-  var active = "research", remaining = 25 * 60, running = false, tick = null;
+  var active = "field", remaining = 15 * 60, running = false, tick = null;
   function blocksDone() { return state.blocks[TODAY] || {}; }
   function blockMin(k) { for (var i = 0; i < BLOCKS.length; i++) if (BLOCKS[i].k === k) return BLOCKS[i].min; return 10; }
   function fmt(sec) { return pad(Math.floor(sec / 60)) + ":" + pad(sec % 60); }
@@ -355,79 +356,160 @@
     }
   }
 
-  /* ── speaking ── */
-  var speakSecs = 120, speakTick = null, transcript = "", recognizer = null, mediaRec = null;
+  /* ── field mastery ── */
+  function renderField(i) {
+    var c = window.FIELD[i % window.FIELD.length];
+    var el = $("field-card");
+    el.innerHTML =
+      '<div><span class="grp">' + esc(c.group) + "</span><h3>" + esc(c.title) + '</h3><div class="meta">' + esc(c.cite) + "</div></div>" +
+      '<p class="lede" style="margin:0">' + esc(c.summary) + "</p>" +
+      c.eqs.map(function (e) { return '<div class="eqbox">\\[' + e + "\\]</div>"; }).join("") +
+      '<div class="where"><b>In your proposal:</b> ' + esc(c.where) + "</div>" +
+      '<div class="cq"><span class="eyebrow" style="color:var(--t-field)">Committee question</span><div class="q">' + esc(c.question) + "</div>" +
+      '<div class="row"><button class="btn" id="cq-btn">Show answer outline</button>' + (caps.sample ? '<button class="btn" id="cq-drill">Drill this aloud in mock defense</button>' : "") + "</div>" +
+      '<ol class="outline" id="cq-out" hidden>' + c.answer.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ol></div>";
+    $("cq-btn").addEventListener("click", function () { var o = $("cq-out"); o.hidden = !o.hidden; this.textContent = o.hidden ? "Show answer outline" : "Hide outline"; });
+    var dr = $("cq-drill"); if (dr) dr.addEventListener("click", function () { startDefense({ q: c.question, look: c.answer }); $("speak").scrollIntoView({ behavior: "smooth" }); });
+    typeset(el);
+  }
+
+  /* ── speaking metrics ── */
+  var FILLERS = ["um", "uh", "erm", "er", "ah", "like", "basically", "actually", "you know", "kind of", "sort of", "i mean"];
+  function metrics(text, secs) {
+    var t = " " + (text || "").toLowerCase().replace(/[^a-z' ]+/g, " ") + " ";
+    var words = t.trim() ? t.trim().split(/\s+/).length : 0;
+    var fill = 0, found = {};
+    FILLERS.forEach(function (f) { var m = t.split(" " + f + " ").length - 1; if (m) { fill += m; found[f] = m; } });
+    var mins = secs > 5 ? secs / 60 : 0;
+    return { words: words, fillers: fill, found: found, wpm: mins ? Math.round(words / mins) : 0, fpm: mins ? +(fill / mins).toFixed(1) : 0 };
+  }
+  function renderMeters(m) {
+    var box = $("df-meters"); if (!box) return;
+    var paceCls = !m.wpm ? "" : (m.wpm >= 120 && m.wpm <= 160 ? "ok" : "warn");
+    var fillCls = !m.wpm ? "" : (m.fpm <= 3 ? "ok" : "warn");
+    var top = Object.keys(m.found).sort(function (a, b) { return m.found[b] - m.found[a]; }).slice(0, 3).map(function (f) { return "“" + f + "” ×" + m.found[f]; }).join(", ");
+    box.innerHTML = "<span><b>" + m.words + "</b> words</span>" +
+      '<span class="' + paceCls + '"><b>' + (m.wpm || "–") + "</b> words/min (aim 130–150)</span>" +
+      '<span class="' + fillCls + '"><b>' + m.fillers + "</b> fillers" + (m.wpm ? " · " + m.fpm + "/min" : "") + "</span>" +
+      (top ? "<span>Most: " + esc(top) + "</span>" : "");
+  }
+  function recordSpeech(m) {
+    if (!m.wpm || m.words < 25) return;
+    state.speech[TODAY] = { wpm: m.wpm, fpm: m.fpm, words: m.words };
+    persist(); renderCoach();
+  }
+
+  /* ── mock defense ── */
+  var thread = [], current = null, dictStart = 0, dictSecs = 0, recognizer = null, mediaRec = null, listening = false;
+  function speakAloud(text, btn) {
+    if (caps.tts) { if (btn) btn.textContent = "Speaking…"; caps.tts.speak(text, { language: "en", rate: 0.95 }).catch(function () {}).then(function () { if (btn) btn.textContent = "Hear it again"; }); return true; }
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.95;
+      var v = speechSynthesis.getVoices().find(function (x) { return /^en(-|_)/i.test(x.lang); }); if (v) u.voice = v;
+      if (btn) { btn.textContent = "Speaking…"; u.onend = function () { btn.textContent = "Hear it again"; }; }
+      speechSynthesis.speak(u); return true;
+    }
+    return false;
+  }
+  function startDefense(item) {
+    current = item; thread = [{ role: "examiner", text: item.q }];
+    renderThread(); resetAnswer();
+    var hb = $("df-hear"); if (hb) { hb.textContent = "Hear the question"; }
+  }
+  function renderThread() {
+    var box = $("df-thread"); if (!box) return;
+    $("df-q").textContent = thread[0].text;
+    box.innerHTML = thread.slice(1).map(function (t) {
+      return '<div class="turn ' + (t.role === "examiner" ? "claude" : "") + '"><span class="who">' + (t.role === "examiner" ? "Examiner" : "You") + "</span>" + esc(t.text) + "</div>";
+    }).join("");
+  }
+  function resetAnswer() { var ta = $("sp-tr"); if (ta) ta.value = ""; dictSecs = 0; renderMeters(metrics("", 0)); }
+  function lastExaminer() { for (var i = thread.length - 1; i >= 0; i--) if (thread[i].role === "examiner") return thread[i].text; return ""; }
+
   function renderSpeak(i) {
-    var s = window.SPEAKING[i % window.SPEAKING.length];
+    var item = window.DEFENSE[i % window.DEFENSE.length];
+    var drill = window.SPEAKING[i % window.SPEAKING.length];
     var v = window.PHILOSOPHY[i % window.PHILOSOPHY.length];
-    var checks = state.checks[viewDate] || {};
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     var canDictate = !!caps.dictation || (!isArtifact && !!SR);
     var canRecord = !isArtifact && !!(navigator.mediaDevices && window.MediaRecorder);
+    var canHear = !!caps.tts || "speechSynthesis" in window;
     $("speak-card").innerHTML =
-      '<div><span class="eyebrow">Warm-up · 2 min</span><div>Recite <b>' + esc(v.ref) + "</b> aloud three times, slowly. Mind the long vowels and retroflex sounds.</div></div>" +
-      '<div><span class="speak-kind">' + esc(s.kind) + "</span><p class=\"prompt\">" + esc(s.prompt) + "</p></div>" +
-      '<div class="why"><b>How to structure it</b>' + esc(s.tip) + "</div>" +
-      '<div class="row" style="gap:14px"><span class="speakclock" id="sp-clock">2:00</span>' +
-      '<button class="btn" id="sp-timer">Start 2-minute timer</button>' +
-      (canDictate ? '<button class="btn" id="sp-dict">Transcribe while I speak</button>' : "") +
-      (canRecord ? '<button class="btn" id="sp-rec">Record to listen back</button>' : "") + "</div>" +
+      '<div><span class="eyebrow">Warm-up · 1 min</span><div>Recite <b>' + esc(v.ref) + "</b> once, slowly and loudly.</div></div>" +
+      '<div class="examiner"><span class="speak-kind">Committee question</span><p class="q" id="df-q"></p>' +
+      '<div class="row">' + (canHear ? '<button class="btn" id="df-hear">Hear the question</button>' : "") +
+      (canDictate ? '<button class="btn" id="sp-dict">Answer aloud</button>' : "") +
+      (canRecord ? '<button class="btn" id="sp-rec">Record to listen back</button>' : "") +
+      '<button class="btn" id="df-look">What a strong answer covers</button></div>' +
+      '<ol class="outline" id="df-look-out" hidden></ol>' +
+      '<div class="field"><label for="sp-tr">Your answer (transcribed as you speak — or type it)</label><textarea id="sp-tr" placeholder="Press “Answer aloud” and speak for one to two minutes…"></textarea></div>' +
+      '<div class="meters" id="df-meters"></div>' +
       '<audio id="sp-audio" controls hidden style="width:100%"></audio>' +
-      '<div class="field" id="sp-tr-wrap" ' + (canDictate ? "" : "hidden") + '><label for="sp-tr">Transcript (edit freely)</label><textarea id="sp-tr" placeholder="Your words appear here as you speak…"></textarea></div>' +
-      '<div class="row">' + (caps.sample ? '<button class="btn" id="sp-fb">Get feedback from Claude</button>' : '<button class="btn" id="sp-copy">Copy transcript + rubric to ask Claude</button>') + "</div>" +
-      '<div class="ai-out" id="sp-out" hidden></div>' +
-      '<div><span class="eyebrow">Self-check</span><ul class="rubric" style="margin-top:6px">' +
-      window.SPEAKING_RUBRIC.map(function (r, j) { return '<li><label><input type="checkbox" data-j="' + j + '"' + (checks[j] ? " checked" : "") + "> <span>" + esc(r) + "</span></label></li>"; }).join("") + "</ul></div>";
+      '<div class="row">' + (caps.sample ? '<button class="iconbtn primary" id="df-fb">Examiner: feedback + follow-up</button>' : '<button class="btn" id="sp-copy">Copy answer + question to ask Claude for feedback</button>') +
+      '<button class="btn" id="df-new">Restart this question</button></div>' +
+      '<div class="thread" id="df-thread"></div></div>' +
+      '<details><summary>Extra drill (' + esc(drill.kind) + ")</summary><div class=\"stack\" style=\"margin-top:8px\"><p class=\"prompt\">" + esc(drill.prompt) + '</p><div class="why"><b>How to structure it</b>' + esc(drill.tip) + "</div></div></details>";
 
-    speakSecs = 120;
-    $("sp-timer").addEventListener("click", function () {
-      if (speakTick) { clearInterval(speakTick); speakTick = null; this.textContent = "Start 2-minute timer"; return; }
-      speakSecs = 120; var btn = this; btn.textContent = "Stop";
-      speakTick = setInterval(function () {
-        speakSecs--; $("sp-clock").textContent = Math.floor(speakSecs / 60) + ":" + pad(speakSecs % 60);
-        if (speakSecs <= 0) { clearInterval(speakTick); speakTick = null; btn.textContent = "Start 2-minute timer"; toast("Two minutes — finish your sentence"); }
-      }, 1000);
+    startDefense(item);
+    $("df-look").addEventListener("click", function () {
+      var o = $("df-look-out"); o.innerHTML = (current.look || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join(""); o.hidden = !o.hidden;
     });
-    document.querySelectorAll(".rubric input").forEach(function (cb) {
-      cb.addEventListener("change", function () {
-        state.checks[viewDate] = state.checks[viewDate] || {};
-        state.checks[viewDate][cb.getAttribute("data-j")] = cb.checked; persist();
-      });
-    });
+    var hb = $("df-hear"); if (hb) hb.addEventListener("click", function () { speakAloud(lastExaminer(), hb); });
     var dict = $("sp-dict"); if (dict) dict.addEventListener("click", function () { toggleDictation(dict, SR); });
     var rec = $("sp-rec"); if (rec) rec.addEventListener("click", function () { toggleRecord(rec); });
-    var fb = $("sp-fb"); if (fb) fb.addEventListener("click", function () { speakingFeedback(s, fb); });
+    $("sp-tr").addEventListener("input", function () { renderMeters(metrics(this.value, dictSecs)); });
+    $("df-new").addEventListener("click", function () { startDefense(current); });
+    var fb = $("df-fb"); if (fb) fb.addEventListener("click", function () { examinerTurn(fb); });
     var cp = $("sp-copy"); if (cp) cp.addEventListener("click", function () {
-      copyText(feedbackPrompt(s, ($("sp-tr") || {}).value || "(paste or type what you said)"), "Copied — paste it into Claude");
+      copyText(examinerPrompt($("sp-tr").value || "(type what you said)"), "Copied — paste it into Claude");
     });
   }
-  function feedbackPrompt(s, text) {
-    return "Give me speaking feedback as a supportive but direct coach.\nContext: " + PROFILE +
-      "\nPrompt I answered (" + s.kind + "): " + s.prompt + "\nWhat I said (speech-to-text, may contain recognition errors):\n\"\"\"\n" + text + "\n\"\"\"\n" +
-      "Assess against: clear opening, one main idea, a concrete number or example, filler words, a clear ending, and whether it was true, useful and calm.\n" +
-      "Reply in plain text under 200 words: 2 strengths, 2 specific fixes, and a rewritten stronger first sentence. If it was a technical answer, flag any technical inaccuracy.";
+  function examinerPrompt(answer) {
+    var hist = thread.map(function (t) { return (t.role === "examiner" ? "EXAMINER: " : "STUDENT: ") + t.text; }).join("\n");
+    var m = metrics(answer, dictSecs);
+    return "You are a fair but demanding member of a PhD proposal committee in computational fluid dynamics, and also a speaking coach.\n\nStudent: " + PROFILE +
+      "\n\nKey points a strong answer to the opening question would cover (for you, not to be read out): " + (current.look || []).join(" | ") +
+      "\n\nConversation so far:\n" + hist + "\nSTUDENT (latest answer, from speech-to-text, may contain recognition errors): " + answer +
+      "\n\nSpeaking data: " + m.words + " words" + (m.wpm ? ", " + m.wpm + " words per minute, " + m.fillers + " filler words" : "") + ".\n\n" +
+      "Reply in plain text, under 170 words, in exactly this order:\n" +
+      "CONTENT: one or two sentences — what was right, and the most important missing or wrong technical point.\n" +
+      "DELIVERY: one concrete tip on clarity, structure or confidence, based on the wording and speaking data.\n" +
+      "BETTER OPENING: one strong first sentence he could have said.\n" +
+      "FOLLOW-UP: one probing follow-up question a real committee member would ask next, on a single line starting with 'FOLLOW-UP:'.";
   }
-  function speakingFeedback(s, btn) {
-    var text = ($("sp-tr").value || "").trim();
-    var out = $("sp-out"); out.hidden = false;
-    if (text.split(/\s+/).length < 15) { out.textContent = "Speak or type at least a few sentences first, then ask for feedback."; return; }
-    btn.disabled = true; out.textContent = "Listening back…";
-    caps.sample(feedbackPrompt(s, text), { onText: function (u) { out.textContent = u.text; } })
-      .then(function (r) { out.textContent = r.text; })
-      .catch(function () { out.textContent = "Couldn't reach Claude here. Try again in a minute."; })
+  function examinerTurn(btn) {
+    var ans = ($("sp-tr").value || "").trim();
+    if (ans.split(/\s+/).length < 12) { toast("Answer aloud (or type) a few sentences first"); return; }
+    var m = metrics(ans, dictSecs); recordSpeech(m);
+    thread.push({ role: "you", text: ans });
+    var reply = { role: "examiner", text: "Thinking…" }; thread.push(reply); renderThread();
+    btn.disabled = true;
+    caps.sample(examinerPrompt(ans), { onText: function (u) { reply.text = u.text; renderThread(); } })
+      .then(function (r) {
+        reply.text = r.text; renderThread();
+        var f = /FOLLOW-UP:\s*(.+)/i.exec(r.text);
+        if (f) { thread.push({ role: "examiner", text: f[1].trim(), followup: true }); }
+        resetAnswer(); renderThread();
+        var hb = $("df-hear"); if (hb) hb.textContent = "Hear the follow-up";
+        $("sp-tr").placeholder = "Answer the follow-up aloud…";
+      })
+      .catch(function (e) { reply.text = e && e.code === "rate_limited" ? "Claude is busy — try again in a minute." : "Couldn't reach Claude here."; renderThread(); })
       .then(function () { btn.disabled = false; });
   }
   function toggleDictation(btn, SR) {
     var ta = $("sp-tr");
     if (caps.dictation) {
       var d = caps.dictation;
-      if (btn.dataset.on === "1") { d.stop().catch(function () {}); return; }
+      if (listening) { d.stop().catch(function () {}); return; }
       var base = ta.value ? ta.value + " " : "";
-      d.onPartial(function (p) { ta.value = base + p.text; });
+      d.onPartial(function (p) { ta.value = base + p.text; renderMeters(metrics(ta.value, dictSecs + (Date.now() - dictStart) / 1000)); });
       d.onFinal(function (f) { base = base + f.text + " "; ta.value = base; });
       d.onState(function (st) {
-        var on = st.state === "listening"; btn.dataset.on = on ? "1" : "0";
-        btn.innerHTML = on ? '<span class="rec-dot"></span> Stop transcribing' : "Transcribe while I speak";
+        var on = st.state === "listening";
+        if (on && !listening) dictStart = Date.now();
+        if (!on && listening) { dictSecs += (Date.now() - dictStart) / 1000; renderMeters(metrics(ta.value, dictSecs)); }
+        listening = on;
+        btn.innerHTML = on ? '<span class="rec-dot"></span> Stop' : "Answer aloud";
       });
       d.start().catch(function (e) { if (e && e.code === "not_granted") { btn.hidden = true; toast("Microphone not allowed — type your answer instead"); } });
       return;
@@ -435,16 +517,18 @@
     if (recognizer) { recognizer.stop(); return; }
     recognizer = new SR(); recognizer.lang = "en-US"; recognizer.continuous = true; recognizer.interimResults = true;
     var finalText = ta.value ? ta.value + " " : "";
+    dictStart = Date.now();
     recognizer.onresult = function (ev) {
       var interim = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
         if (ev.results[i].isFinal) finalText += ev.results[i][0].transcript + " "; else interim += ev.results[i][0].transcript;
       }
       ta.value = finalText + interim;
+      renderMeters(metrics(ta.value, dictSecs + (Date.now() - dictStart) / 1000));
     };
-    recognizer.onend = function () { recognizer = null; btn.textContent = "Transcribe while I speak"; };
+    recognizer.onend = function () { dictSecs += (Date.now() - dictStart) / 1000; recognizer = null; btn.textContent = "Answer aloud"; var m = metrics(ta.value, dictSecs); renderMeters(m); recordSpeech(m); };
     recognizer.onerror = function () { toast("Speech recognition stopped"); };
-    recognizer.start(); btn.innerHTML = '<span class="rec-dot"></span> Stop transcribing';
+    recognizer.start(); btn.innerHTML = '<span class="rec-dot"></span> Stop';
   }
   function toggleRecord(btn) {
     if (mediaRec && mediaRec.state === "recording") { mediaRec.stop(); return; }
@@ -458,6 +542,26 @@
       };
       mediaRec.start(); btn.innerHTML = '<span class="rec-dot"></span> Stop recording';
     }).catch(function () { toast("Microphone not available"); });
+  }
+
+  /* ── coach ── */
+  function renderCoach() {
+    var tips = window.COACH_TIPS;
+    $("tips-speaking").innerHTML = tips.speaking.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
+    $("tips-growth").innerHTML = tips.growth.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
+    var days = Object.keys(state.speech || {}).sort().slice(-7);
+    var box = $("speech-trend");
+    if (!days.length) { box.innerHTML = ""; return; }
+    var maxW = Math.max.apply(null, days.map(function (d) { return state.speech[d].wpm; }).concat([160]));
+    box.innerHTML = days.map(function (d) {
+      var e = state.speech[d];
+      return '<div class="bar" title="' + esc(prettyDate(d)) + ": " + e.wpm + ' wpm" style="height:' + Math.max(6, Math.round(44 * e.wpm / maxW)) + 'px"><span>' + e.wpm + "</span></div>";
+    }).join("");
+    var last = state.speech[days[days.length - 1]];
+    var first = state.speech[days[0]];
+    $("speech-summary").textContent = "Latest: " + last.wpm + " words/min, " + last.fpm + " fillers/min." +
+      (days.length > 1 ? " First of these: " + first.wpm + " words/min, " + first.fpm + " fillers/min." : "") +
+      " Target: 130–150 words/min and under 3 fillers/min.";
   }
 
   /* ── reflect / streak ── */
@@ -506,7 +610,7 @@
     $("stat-day").textContent = idx + 1;
     $("day-label").textContent = (viewDate === TODAY ? "Today" : prettyDate(viewDate)) + " · Day " + (idx + 1);
     $("today-btn").hidden = viewDate === TODAY;
-    renderClassic(idx); renderPhilo(idx); renderSpeak(idx); renderReflect();
+    renderField(idx); renderClassic(idx); renderPhilo(idx); renderSpeak(idx); renderReflect();
   }
   function shiftDay(n) { viewDate = addDays(viewDate, n); renderDay(); }
 
@@ -540,13 +644,13 @@
         }).then(function (snap) {
           if (snap.exists) {
             var remote = snap.data() || {};
-            ["saved", "read", "log", "blocks", "drafts", "checks"].forEach(function (k) { if (remote[k]) state[k] = remote[k]; });
+            ["saved", "read", "log", "blocks", "drafts", "checks", "speech"].forEach(function (k) { if (remote[k]) state[k] = remote[k]; });
           } else { persist(); }
           setStatus("Progress syncs across your devices");
         }).catch(function () { caps.userDoc = null; setStatus("Progress is saved in this browser"); });
       } else setStatus("Progress is saved in this browser");
       return chain.then(loadFeedFromDb);
-    }).then(function () { renderRadar(); renderDay(); renderClock(); });
+    }).then(function () { renderRadar(); renderDay(); renderClock(); renderCoach(); });
   }
 
   /* ── wire up ── */
@@ -570,7 +674,7 @@
     ["r-learned", "r-action"].forEach(function (id) { $(id).addEventListener("input", function () { clearTimeout(window._dr); window._dr = setTimeout(saveDraft, 500); }); });
     $("complete-btn").addEventListener("click", complete);
 
-    renderClock(); renderDay();
+    renderClock(); renderDay(); renderCoach();
     loadFeed().then(function () { renderRadar(); });
     initCapabilities();
   });

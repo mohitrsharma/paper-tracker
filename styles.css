@@ -12,6 +12,7 @@
   --accent-soft: #e6e7fa;
   --saffron: #c96a08;     /* philosophy track, readable on light */
   --saffron-soft: #fbecd9;
+  --t-field: #1f7a6d;
   --t-research: #2763a8;
   --t-classic: #3b3fae;
   --t-philo: #c96a08;
@@ -28,14 +29,14 @@
   :root:not([data-theme="light"]) {
     --bg: #12142a; --surface: #1a1d38; --sunk: #222647; --fg: #e8e9f6; --muted: #a2a6c6;
     --line: #2f3460; --accent: #9ea3ff; --accent-soft: #2a2e63; --saffron: #f2a24a; --saffron-soft: #3a2a1a;
-    --t-research: #7fb2f0; --t-classic: #9ea3ff; --t-philo: #f2a24a; --t-speak: #ec8fbd;
+    --t-field: #5fd0bd; --t-research: #7fb2f0; --t-classic: #9ea3ff; --t-philo: #f2a24a; --t-speak: #ec8fbd;
     --good: #6fd09a; --warn: #e9c15c; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #12142a; --surface: #1a1d38; --sunk: #222647; --fg: #e8e9f6; --muted: #a2a6c6;
   --line: #2f3460; --accent: #9ea3ff; --accent-soft: #2a2e63; --saffron: #f2a24a; --saffron-soft: #3a2a1a;
-  --t-research: #7fb2f0; --t-classic: #9ea3ff; --t-philo: #f2a24a; --t-speak: #ec8fbd;
+  --t-field: #5fd0bd; --t-research: #7fb2f0; --t-classic: #9ea3ff; --t-philo: #f2a24a; --t-speak: #ec8fbd;
   --good: #6fd09a; --warn: #e9c15c; color-scheme: dark;
 }
 
@@ -82,7 +83,7 @@ button { font: inherit; color: inherit; }
   background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line);
 }
 .clock-inner { display: flex; gap: 12px; align-items: center; }
-.blocks { flex: 1; display: grid; grid-template-columns: 25fr 15fr 10fr 10fr; gap: 4px; min-width: 0; }
+.blocks { flex: 1; display: grid; grid-template-columns: 15fr 25fr 15fr 10fr 10fr; gap: 4px; min-width: 0; }
 .blk {
   position: relative; border: 0; padding: 6px 8px 7px; border-radius: 6px; cursor: pointer; text-align: left;
   background: var(--sunk); overflow: hidden; min-width: 0;
@@ -90,6 +91,7 @@ button { font: inherit; color: inherit; }
 .blk .fill { position: absolute; inset: 0 auto 0 0; width: 0; opacity: 0.18; background: currentColor; transition: width .5s linear; }
 .blk .nm { position: relative; display: block; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .blk .mn { position: relative; font: 500 0.75rem var(--font-mono); color: var(--muted); }
+.blk[data-k="field"] { color: var(--t-field); }
 .blk[data-k="research"] { color: var(--t-research); }
 .blk[data-k="classic"] { color: var(--t-classic); }
 .blk[data-k="philo"] { color: var(--t-philo); }
@@ -122,6 +124,7 @@ main { display: flex; flex-direction: column; gap: 40px; padding-block: 28px 64p
   border: 1px solid currentColor;
 }
 .st-head .hint { color: var(--muted); font-size: 0.9rem; flex-basis: 100%; margin: 0; }
+#field .mins { color: var(--t-field); }
 #research .mins { color: var(--t-research); }
 #classic .mins { color: var(--t-classic); }
 #philo .mins { color: var(--t-philo); }
@@ -230,3 +233,34 @@ footer { color: var(--muted); font-size: 0.8rem; padding-block: 0 40px; }
   position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
   background: var(--fg); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: 0.88rem; z-index: 20;
 }
+
+/* ── Field mastery ── */
+.field-card { border-color: var(--t-field); }
+.field-card h3 { font: 600 1.35rem/1.25 var(--font-display); margin: 4px 0 2px; text-wrap: balance; }
+.grp { font: 600 0.72rem var(--font-mono); color: var(--t-field); text-transform: uppercase; letter-spacing: 0.06em; }
+.where { font-size: 0.88rem; color: var(--muted); }
+.cq { background: var(--sunk); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.cq .q { font: 500 1.08rem/1.45 var(--font-display); }
+.outline { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+
+/* ── Mock defense ── */
+.examiner { display: flex; flex-direction: column; gap: 10px; }
+.examiner .q { font: 500 1.2rem/1.45 var(--font-display); margin: 0; }
+.meters { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.85rem; color: var(--muted); }
+.meters b { font: 600 1.05rem var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+.meters .ok b { color: var(--good); }
+.meters .warn b { color: var(--warn); }
+.thread { display: flex; flex-direction: column; gap: 10px; }
+.thread .turn { border-left: 2px solid var(--line); padding-left: 12px; font-size: 0.95rem; white-space: pre-wrap; }
+.thread .turn.claude { border-color: var(--t-speak); }
+.thread .who { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; display: block; }
+
+/* ── Coach ── */
+.tips { margin: 8px 0 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+.spark { display: flex; gap: 6px; align-items: flex-end; height: 48px; margin-top: 6px; }
+.spark .bar { width: 18px; border-radius: 3px 3px 0 0; background: var(--t-speak); opacity: 0.8; position: relative; }
+.spark .bar span { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font: 500 0.65rem var(--font-mono); color: var(--muted); }
+@media (max-width: 560px) { .blk .nm { font-size: 0.58rem; letter-spacing: 0.02em; } }
+
+.blk .sh { display: none; }
+@media (max-width: 560px) { .blk .lg { display: none; } .blk .sh { display: inline; } .blk .nm { font-size: 0.66rem; } }
