@@ -59,7 +59,7 @@
   /* ── state ── */
   var TODAY = isoLocal(new Date());
   var viewDate = TODAY;
-  var state = { saved: [], read: {}, log: {}, blocks: {}, drafts: {}, checks: {}, speech: {} };
+  var state = { saved: [], read: {}, log: {}, blocks: {}, drafts: {}, checks: {}, speech: {}, days: {} };
   var LS_KEY = "dailyHour_v1";
 
   function loadLocal() {
@@ -81,8 +81,33 @@
     if (caps.db && caps.userDoc) {
       clearTimeout(saveTimer);
       saveTimer = setTimeout(function () {
-        caps.userDoc.set(JSON.parse(JSON.stringify(state))).catch(function () { setStatus("Sync paused — progress is kept in this browser"); });
+        var main = JSON.parse(JSON.stringify(state)); delete main.days;
+        caps.userDoc.set(main).catch(function () { setStatus("Sync paused — progress is kept in this browser"); });
       }, 800);
+    }
+  }
+  /* ── daily record: what was done each day, kept for later review ── */
+  function rec() {
+    state.days = state.days || {};
+    var r = state.days[TODAY];
+    if (!r) r = state.days[TODAY] = { kind: "day", date: TODAY, cycleDay: cycleIndex(TODAY) + 1, blocks: [], papersRead: [], papersSaved: [], defense: [], recall: "", learned: "", action: "", done: false };
+    return r;
+  }
+  var dayTimer;
+  function touchDay(mut) {
+    var r = rec();
+    var idx = cycleIndex(TODAY);
+    var fi = fieldPick != null ? fieldPick : idx % window.FIELD.length;
+    r.field = window.FIELD[fi].title;
+    if (r.fieldStudied) { if (r.fieldStudied.indexOf(r.field) < 0) r.fieldStudied.push(r.field); } else r.fieldStudied = [r.field];
+    r.classic = window.CLASSICS[idx % window.CLASSICS.length].title;
+    r.sloka = window.PHILOSOPHY[idx % window.PHILOSOPHY.length].ref;
+    if (mut) mut(r);
+    r.updated = new Date().toISOString();
+    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+    if (caps.userCol) {
+      clearTimeout(dayTimer);
+      dayTimer = setTimeout(function () { caps.userCol.doc("day-" + TODAY).set(JSON.parse(JSON.stringify(state.days[TODAY]))).catch(function () {}); }, 900);
     }
   }
   function setStatus(s) { $("mode-status").textContent = s; }
@@ -132,6 +157,7 @@
   function markBlock(k) {
     state.blocks[TODAY] = state.blocks[TODAY] || {};
     state.blocks[TODAY][k] = true; persist(); renderClock();
+    touchDay(function (r) { if (r.blocks.indexOf(k) < 0) r.blocks.push(k); });
   }
 
   /* ── research radar ── */
@@ -143,7 +169,7 @@
   function toggleSave(p) {
     var k = paperKey(p);
     if (isSaved(p)) state.saved = state.saved.filter(function (s) { return paperKey(s) !== k; });
-    else state.saved.unshift({ title: p.title, authors: p.authors, url: p.url, venue: p.venue, date: p.date, summary: p.summary || null, why: p.why || "", savedOn: TODAY });
+    else { state.saved.unshift({ title: p.title, authors: p.authors, url: p.url, venue: p.venue, date: p.date, summary: p.summary || null, why: p.why || "", savedOn: TODAY }); touchDay(function (r) { r.papersSaved.push(p.title); }); }
     persist();
   }
   function rank(p) { return (p.relevance || 0) + (p.hasAbstract === false ? -1.5 : 0); }
@@ -186,7 +212,7 @@
     readBtn.classList.toggle("on", !!state.read[paperKey(p)]);
     readBtn.addEventListener("click", function () {
       var k = paperKey(p);
-      if (state.read[k]) delete state.read[k]; else state.read[k] = TODAY;
+      if (state.read[k]) delete state.read[k]; else { state.read[k] = TODAY; touchDay(function (r) { if (r.papersRead.indexOf(p.title) < 0) r.papersRead.push(p.title); }); }
       persist(); readBtn.textContent = state.read[k] ? "Read ✓" : "Mark as read"; readBtn.classList.toggle("on", !!state.read[k]);
     });
     var ask = el.querySelector(".act-ask");
@@ -313,6 +339,7 @@
       '<textarea id="recall-try" placeholder="Answer first, in your own words…" style="min-height:60px"></textarea>' +
       '<div class="row"><button class="btn" id="recall-btn">Reveal answer</button></div>' +
       '<div class="ans" hidden id="recall-ans">' + esc(c.recall.a) + "</div></div>";
+    if (viewDate === TODAY) $("recall-try").addEventListener("input", function () { var v = this.value; clearTimeout(window._rc); window._rc = setTimeout(function () { touchDay(function (r) { r.recall = v; }); }, 700); });
     $("recall-btn").addEventListener("click", function () { var a = $("recall-ans"); a.hidden = !a.hidden; this.textContent = a.hidden ? "Reveal answer" : "Hide answer"; });
     typeset(el);
   }
@@ -375,7 +402,7 @@
       '<div class="row"><button class="btn" id="cq-btn">Show answer outline</button>' + (caps.sample ? '<button class="btn" id="cq-drill">Drill this aloud in mock defense</button>' : "") + "</div>" +
       '<ol class="outline" id="cq-out" hidden>' + c.answer.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ol></div>";
     $("field-pick").addEventListener("change", function () { fieldPick = +this.value; renderField(i); });
-    $("cq-btn").addEventListener("click", function () { var o = $("cq-out"); o.hidden = !o.hidden; this.textContent = o.hidden ? "Show answer outline" : "Hide outline"; });
+    $("cq-btn").addEventListener("click", function () { if (viewDate === TODAY) touchDay(); var o = $("cq-out"); o.hidden = !o.hidden; this.textContent = o.hidden ? "Show answer outline" : "Hide outline"; });
     var dr = $("cq-drill"); if (dr) dr.addEventListener("click", function () { startDefense({ q: c.question, look: c.answer }); $("speak").scrollIntoView({ behavior: "smooth" }); });
     typeset(el);
   }
@@ -403,6 +430,7 @@
   function recordSpeech(m) {
     if (!m.wpm || m.words < 25) return;
     state.speech[TODAY] = { wpm: m.wpm, fpm: m.fpm, words: m.words };
+    touchDay(function (r) { r.speech = { wpm: m.wpm, fpm: m.fpm, words: m.words }; });
     persist(); renderCoach();
   }
 
@@ -494,6 +522,8 @@
     caps.sample(examinerPrompt(ans), { onText: function (u) { reply.text = u.text; renderThread(); } })
       .then(function (r) {
         reply.text = r.text; renderThread();
+        var qAsked = thread.length >= 3 ? thread[thread.length - 3].text : current.q;
+        touchDay(function (d) { d.defense.push({ q: qAsked, answer: ans, feedback: r.text, wpm: m.wpm, fillers: m.fillers, at: new Date().toISOString() }); });
         var f = /FOLLOW-UP:\s*(.+)/i.exec(r.text);
         if (f) { thread.push({ role: "examiner", text: f[1].trim(), followup: true }); }
         resetAnswer(); renderThread();
@@ -591,11 +621,26 @@
       s.className = state.log[d] && state.log[d].done ? "on" : ""; s.title = prettyDate(d); wk.appendChild(s);
     }
     var days = Object.keys(state.log).filter(function (d) { return state.log[d].done; }).sort().reverse();
-    $("history").innerHTML = days.length ? days.slice(0, 30).map(function (d) {
-      var e = state.log[d];
-      return '<li><span class="d">' + prettyDate(d) + " · day " + (cycleIndex(d) + 1) + "</span><div>" + esc(e.learned || "—") + "</div>" +
-        (e.action ? '<div class="meta">Next: ' + esc(e.action) + "</div>" : "") + "</li>";
-    }).join("") : '<li class="meta">Your entries will collect here.</li>';
+    var all = {}; days.forEach(function (d) { all[d] = 1; }); Object.keys(state.days || {}).forEach(function (d) { all[d] = 1; });
+    var list = Object.keys(all).sort().reverse();
+    $("history").innerHTML = list.length ? list.slice(0, 30).map(function (d) {
+      var e = state.log[d] || {}, r = (state.days || {})[d] || {};
+      var bits = [];
+      if (r.fieldStudied && r.fieldStudied.length) bits.push("Field: " + r.fieldStudied.join("; "));
+      if (r.classic) bits.push("Classic: " + r.classic);
+      if (r.sloka) bits.push("Śloka: " + r.sloka);
+      if (r.papersRead && r.papersRead.length) bits.push(r.papersRead.length + " paper" + (r.papersRead.length > 1 ? "s" : "") + " read");
+      if (r.speech) bits.push("Speaking " + r.speech.wpm + " wpm, " + r.speech.fpm + " fillers/min");
+      var def = (r.defense || []).map(function (t) {
+        return '<div class="turn"><span class="who">Question</span>' + esc(t.q) + '</div><div class="turn"><span class="who">Your answer' + (t.wpm ? " · " + t.wpm + " wpm" : "") + "</span>" + esc(t.answer) + '</div><div class="turn claude"><span class="who">Examiner</span>' + esc(t.feedback) + "</div>";
+      }).join("");
+      return '<li><span class="d">' + prettyDate(d) + " · day " + (cycleIndex(d) + 1) + (e.done ? " · completed" : "") + "</span>" +
+        "<div>" + esc(e.learned || r.learned || "—") + "</div>" +
+        ((e.action || r.action) ? '<div class="meta">Next: ' + esc(e.action || r.action) + "</div>" : "") +
+        (bits.length ? '<div class="meta">' + esc(bits.join(" · ")) + "</div>" : "") +
+        (def ? "<details><summary>Mock defense (" + r.defense.length + ")</summary><div class=\"thread\" style=\"margin-top:6px\">" + def + "</div></details>" : "") +
+        (r.recall ? '<div class="meta">Recall answer: ' + esc(r.recall) + "</div>" : "") + "</li>";
+    }).join("") : '<li class="meta">Each day you study, a record appears here: field card, papers read, mock-defense answers and feedback, speaking pace, and your notes.</li>';
     $("stat-streak").textContent = streak();
     $("stat-total").textContent = days.length;
   }
@@ -606,6 +651,7 @@
   function complete() {
     state.log[viewDate] = { done: true, learned: $("r-learned").value.trim(), action: $("r-action").value.trim(), day: cycleIndex(viewDate) + 1 };
     delete state.drafts[viewDate];
+    if (viewDate === TODAY) touchDay(function (r) { r.done = true; r.learned = state.log[TODAY].learned; r.action = state.log[TODAY].action; });
     if (viewDate === TODAY) BLOCKS.forEach(function (b) { markBlock(b.k); });
     persist(); renderReflect();
     toast(viewDate === TODAY ? "Hour complete — streak " + streak() : "Logged");
@@ -646,7 +692,12 @@
       var chain = Promise.resolve();
       if (caps.db && caps.user) {
         chain = caps.user.id().then(function (id) {
-          caps.userDoc = caps.db.collection("data/users/" + id).doc("state");
+          caps.userCol = caps.db.collection("data/users/" + id);
+          caps.userDoc = caps.userCol.doc("state");
+          caps.userCol.where("kind", "==", "day").limit(400).get().then(function (qs) {
+            qs.docs.forEach(function (d) { var v = d.data(); if (v && v.date) state.days[v.date] = v; });
+            renderReflect();
+          }).catch(function () {});
           return caps.userDoc.get();
         }).then(function (snap) {
           if (snap.exists) {
