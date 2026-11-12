@@ -357,10 +357,16 @@
   }
 
   /* ── field mastery ── */
+  var fieldPick = null;
   function renderField(i) {
-    var c = window.FIELD[i % window.FIELD.length];
+    var idx = fieldPick != null ? fieldPick : i % window.FIELD.length;
+    var c = window.FIELD[idx];
     var el = $("field-card");
     el.innerHTML =
+      '<div class="row" style="justify-content:space-between"><label class="meta" for="field-pick">Card ' + (idx + 1) + " of " + window.FIELD.length + '</label>' +
+      '<select id="field-pick" style="width:auto;max-width:100%">' + window.FIELD.map(function (f, j) {
+        return '<option value="' + j + '"' + (j === idx ? " selected" : "") + ">" + (j + 1) + ". " + esc(f.group) + " — " + esc(f.title.length > 60 ? f.title.slice(0, 58) + "…" : f.title) + "</option>";
+      }).join("") + "</select></div>" +
       '<div><span class="grp">' + esc(c.group) + "</span><h3>" + esc(c.title) + '</h3><div class="meta">' + esc(c.cite) + "</div></div>" +
       '<p class="lede" style="margin:0">' + esc(c.summary) + "</p>" +
       c.eqs.map(function (e) { return '<div class="eqbox">\\[' + e + "\\]</div>"; }).join("") +
@@ -368,6 +374,7 @@
       '<div class="cq"><span class="eyebrow" style="color:var(--t-field)">Committee question</span><div class="q">' + esc(c.question) + "</div>" +
       '<div class="row"><button class="btn" id="cq-btn">Show answer outline</button>' + (caps.sample ? '<button class="btn" id="cq-drill">Drill this aloud in mock defense</button>' : "") + "</div>" +
       '<ol class="outline" id="cq-out" hidden>' + c.answer.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ol></div>";
+    $("field-pick").addEventListener("change", function () { fieldPick = +this.value; renderField(i); });
     $("cq-btn").addEventListener("click", function () { var o = $("cq-out"); o.hidden = !o.hidden; this.textContent = o.hidden ? "Show answer outline" : "Hide outline"; });
     var dr = $("cq-drill"); if (dr) dr.addEventListener("click", function () { startDefense({ q: c.question, look: c.answer }); $("speak").scrollIntoView({ behavior: "smooth" }); });
     typeset(el);
@@ -612,7 +619,7 @@
     $("today-btn").hidden = viewDate === TODAY;
     renderField(idx); renderClassic(idx); renderPhilo(idx); renderSpeak(idx); renderReflect();
   }
-  function shiftDay(n) { viewDate = addDays(viewDate, n); renderDay(); }
+  function shiftDay(n) { viewDate = addDays(viewDate, n); fieldPick = null; renderDay(); }
 
   /* ── data loading ── */
   function loadFeed() {
