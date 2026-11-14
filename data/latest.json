@@ -1,0 +1,282 @@
+{
+ "generated": "2026-11-14",
+ "window": "Papers published since 30 Sep 2026 (plus one strong August item missed earlier)",
+ "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them. Dates given as YYYY-MM have no exact day available.",
+ "items": [
+  {
+   "title": "Penetration of a sphere in a pool: Secondary pinch-off",
+   "authors": "P. K. Billa, C. Tropea, P. S. Mahapatra et al.",
+   "venue": "arXiv (physics.flu-dyn)",
+   "date": "2026-10-30",
+   "url": "https://arxiv.org/abs/2610.41942",
+   "tags": [
+    "Water entry",
+    "Wettability",
+    "Experiment"
+   ],
+   "relevance": 5,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "After a sphere enters water its air cavity can pinch off more than once, and these later pinch-offs decide whether a light sphere rises back up or keeps sinking; wettability matters but past work stopped at the first pinch-off.",
+    "method": "High-speed imaging (1000–2000 fps) of 4, 6 and 10 mm hydrophobic (~100°) and superhydrophobic (~155°) spheres dropped into a deep tank, with tracked trajectories and a gravity–buoyancy–drag force balance.",
+    "result": "Over impact speeds of 0.89–3.52 m/s (Fr 2.8–17.8), no sphere with density ratio ≥ 3.26 or contact angle below 97° came back up; superhydrophobic 4 and 6 mm spheres did, and hydrophobic ones only in some repeats."
+   },
+   "why": "A fresh experimental dataset where the outcome hinges on contact angle on a moving sphere — exactly requirement 4 of your proposal — and a ready validation case for your water-entry runs past the first pinch-off. Note the 155° angle was measured on a flat plate, not on the sphere."
+  },
+  {
+   "title": "Quantum-Classical Iterative Refinement for the Pressure-Poisson Equation on NISQ Hardware",
+   "authors": "D. Ahn, B. Park, R. S. Myong et al.",
+   "venue": "arXiv",
+   "date": "2026-10",
+   "url": "https://arxiv.org/abs/2610.24342",
+   "tags": [
+    "Quantum solver",
+    "Pressure Poisson"
+   ],
+   "relevance": 5,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "A single quantum linear solve of the projection-method pressure equation leaves an error floor on noisy hardware; earlier schemes needed state infidelity below 1e-7.",
+    "method": "Repeatedly solve for the normalized residual on a MAC grid and scale each quantum direction by a least-squares fit to the physical residual, so quantum error only slows contraction instead of setting a floor.",
+    "result": "On IBM hardware (16×16, 4 qubits) the relative residual fell below 1e-7 in 8–10 corrections in all 20 runs, versus 0.33–0.59 for a single solve; a 64×64 pilot needed 13 corrections and IonQ Forte reached 5.6e-8 in nine."
+   },
+   "why": "The most practical answer yet to the noise floor your quantum pressure-solver study has to confront; iterative refinement also sidesteps part of the conditioning problem in your Poisson condition-number note, though it was shown only for constant density."
+  },
+  {
+   "title": "Investigation on splash and airflow evolution mechanism during water-entry of a hydrophobic sphere",
+   "authors": "See paper for authors",
+   "venue": "Physics of Fluids 38(9), Sept 2026 issue",
+   "date": "2026-09",
+   "url": "https://pubs.aip.org/aip/pof/article-abstract/38/9/093335/3404532/",
+   "tags": [
+    "Water entry",
+    "Splash",
+    "Wettability"
+   ],
+   "relevance": 5,
+   "hasAbstract": false,
+   "summary": {
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: a study of how the splash and the air flow into the cavity develop when a hydrophobic sphere enters water.",
+    "result": "Open the paper to see results."
+   },
+   "why": "Directly on topic 1. The airflow into the cavity connects to the air film in your solver, so check whether it reports gas speeds you could compare against."
+  },
+  {
+   "authors": "L. M. Piskol, T. Grahs, S. Langer",
+   "date": "2026-09-21",
+   "hasAbstract": true,
+   "relevance": 5,
+   "summary": {
+    "method": "The Jacobi iteration is written as a polynomial of a block-encoded operator using quantum singular value transformation (QSVT), and tested on 1D and 2D Poisson problems — including the pressure Poisson equation inside Chorin's projection method for lid-driven cavity flow.",
+    "problem": "Most quantum linear solvers try to invert the matrix directly, while CFD codes rely on iterative methods such as Jacobi.",
+    "result": "The number of ancilla qubits stays constant as iterations increase; circuit depth grows linearly with the number of Jacobi iterations."
+   },
+   "tags": [
+    "Quantum",
+    "Pressure Poisson"
+   ],
+   "title": "A QSVT-Based Quantum Jacobi Algorithm for Linear Systems with Application to the Poisson Equation",
+   "url": "https://doi.org/10.48550/arxiv.2609.24266",
+   "venue": "arXiv preprint",
+   "why": "The closest paper to your quantum pressure-solver study: it uses exactly Chorin's projection step. Compare its iteration-count argument with your condition-number numbers — Jacobi needs O(κ) iterations, so your multiphase κ would make the circuit very deep."
+  },
+  {
+   "authors": "X. Chen, X. Li, B. Yin et al.",
+   "date": "2026-09-07",
+   "hasAbstract": true,
+   "relevance": 5,
+   "summary": {
+    "method": "A coupled VOF/level-set method combined with an immersed boundary method and discrete element method, extended to an axisymmetric configuration.",
+    "problem": "How does a particle striking a wall-attached bubble make it detach?",
+    "result": "Three detachment modes are identified: capillary-wave, bubble-rebound and particle-rebound."
+   },
+   "tags": [
+    "VOF",
+    "Immersed boundary",
+    "Contact line"
+   ],
+   "title": "Bubble detachment from solid surfaces induced by impacting particles",
+   "url": "https://doi.org/10.1017/jfm.2026.11990",
+   "venue": "Journal of Fluid Mechanics",
+   "why": "Combines the three ingredients of your thesis — VOF interface, immersed solid, and a wall-attached interface — in a JFM paper. Check how they treat the contact angle on the wall while the particle moves."
+  },
+  {
+   "authors": "S. K. Nayak, A. Bhattacharya, P. M. Nair",
+   "date": "2026-10-13",
+   "hasAbstract": false,
+   "relevance": 5,
+   "summary": {
+    "method": "From the title: a 3D numerical scheme for contact-line pinning on chemically or physically heterogeneous walls.",
+    "problem": "Title only — abstract not available.",
+    "result": "Open the paper to see results."
+   },
+   "tags": [
+    "Contact line",
+    "Numerics"
+   ],
+   "title": "A three-dimensional numerical scheme for modeling contact line pinning on heterogeneous substrates",
+   "url": "https://doi.org/10.1016/j.cpc.2026.110462",
+   "venue": "Computer Physics Communications",
+   "why": "Pinning and hysteresis are the natural next step beyond a single equilibrium contact angle in your three-phase work. Worth reading the method section."
+  },
+  {
+   "title": "A Variational Quantum Linear Solver via Block Encoding for the Poisson Equation",
+   "authors": "V. Dsouza, A. Singhal, A. Khan et al.",
+   "venue": "arXiv",
+   "date": "2026-08-20",
+   "url": "https://arxiv.org/abs/2608.19655",
+   "tags": [
+    "Quantum solver",
+    "VQLS",
+    "Pressure Poisson"
+   ],
+   "relevance": 4,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "VQLS for the discrete Poisson equation is expensive because LCU-based cost functions need O(L²) circuits per evaluation.",
+    "method": "Uses an exact block encoding of the discrete Laplacian so each cost evaluation needs one circuit, tested on sinusoidal forcing, a Gaussian-source heat problem and the lid-driven-cavity pressure-Poisson equation (Neumann boundaries).",
+    "result": "The abstract gives no numbers; it reports the single-circuit cost and that the choice of classical optimizer strongly changes where training stalls."
+   },
+   "why": "Older than this window but missed by earlier feeds: a VQLS baseline that includes a Neumann pressure-Poisson case, useful as a comparison point beside HHL and QSVT in your quantum pressure-solver study."
+  },
+  {
+   "title": "Coupled Rigid-Body Motion and Binary Phase Change: A Sharp Level-Set/Embedded-Boundary Method",
+   "authors": "C.-F. Zhang, Z.-H. Xue, J. Zhang et al.",
+   "venue": "arXiv (Elsevier journal version)",
+   "date": "2026-09",
+   "url": "https://arxiv.org/abs/2609.39431",
+   "tags": [
+    "FSI",
+    "Embedded boundary",
+    "Cut cell",
+    "Rigid body"
+   ],
+   "relevance": 4,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "Freely moving solids that also melt are hard to simulate because fluid forces move the body while melting changes its shape at the same interface.",
+    "method": "Level-set tracking of a solid that translates, rotates and melts on a fixed Cartesian grid, embedded-boundary conditions at the surface, conservative moving cut cells for liquid heat and salt, and sub-iteration of loads, motion and phase change each step.",
+    "result": "Matches reference solutions in rigid-body and melting tests, gives a Strouhal number of 0.1175 against 0.1172 from a body-fitted solver for a settling oblate ellipsoid, and simulates a 3D ellipsoid that moves and melts at once."
+   },
+   "why": "A recent example of a solid moving without remeshing plus conservative cut-cell transport (requirements 1 and 2), with a coupling loop you can compare with Pathak & Raessi; the authors admit the level-set volume error (~1e-2) is worse than VOF."
+  },
+  {
+   "title": "Spatiotemporal asymmetric cavity dynamics during oblique water entry",
+   "authors": "See paper for authors",
+   "venue": "Physics of Fluids 38(9), Sept 2026 issue",
+   "date": "2026-09",
+   "url": "https://pubs.aip.org/aip/pof/article-abstract/38/9/092101/3403474/",
+   "tags": [
+    "Water entry",
+    "Cavity"
+   ],
+   "relevance": 4,
+   "hasAbstract": false,
+   "summary": {
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: a study of how a cavity forms and evolves asymmetrically in space and time during oblique water entry.",
+    "result": "Open the paper to see results."
+   },
+   "why": "Oblique entry breaks axisymmetry, a harder 3D test for a fictitious-domain solid moving through a free surface; worth a look for your review's water-entry section."
+  },
+  {
+   "authors": "S. Guo, P. Lin, Y. Wang",
+   "date": "2026-10-30",
+   "hasAbstract": false,
+   "relevance": 4,
+   "summary": {
+    "method": "From the title: an explicit partitioned FSI coupling with Robin interface conditions, claimed unconditionally stable.",
+    "problem": "Title only — abstract not available.",
+    "result": "Open the paper to see results."
+   },
+   "tags": [
+    "FSI",
+    "Coupling"
+   ],
+   "title": "An unconditionally stable explicit Robin–Robin partitioned scheme for fluid–structure interaction",
+   "url": "https://doi.org/10.1016/j.jcp.2026.115545",
+   "venue": "Journal of Computational Physics",
+   "why": "Relevant to your earlier FSI-coupling study: explicit partitioned schemes usually suffer from the added-mass instability. Robin–Robin coupling is one of the standard cures."
+  },
+  {
+   "title": "Dynamics of singular-jet formation during the collapse of drop-impact craters",
+   "authors": "N. Mishra, A. Pal",
+   "venue": "arXiv (physics.flu-dyn)",
+   "date": "2026-11-05",
+   "url": "https://arxiv.org/abs/2611.12533",
+   "tags": [
+    "Cavity collapse",
+    "VOF",
+    "Basilisk"
+   ],
+   "relevance": 3,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "Why some collapsing drop-impact craters produce very thin, very fast singular jets.",
+    "method": "2D axisymmetric direct simulations in Basilisk with adaptive mesh refinement, checked against experiments.",
+    "result": "For a 3.64 mm drop the singular jet reaches 61.7 m/s with a ~210 μm trapped bubble and a critical wall-to-base angle of 109.2°; for We 100–200 and Fr 45–92 the bubble-entrainment band lies between We = 45.5 Fr^0.237 and We = 53.5 Fr^0.251."
+   },
+   "why": "Cavity collapse and jetting are the same physics as the Worthington jet after water entry; a good stress test for curvature and spurious currents in your PLIC code at high interface speeds."
+  },
+  {
+   "title": "Amortized Transport-Map Likelihoods for Hierarchical Inverse Problems with Application to Wetting",
+   "authors": "H. Bonart",
+   "venue": "arXiv",
+   "date": "2026-11-09",
+   "url": "https://arxiv.org/abs/2611.12193",
+   "tags": [
+    "ML",
+    "Wetting",
+    "Contact angle"
+   ],
+   "relevance": 3,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "Bayesian inference of wetting properties needs one forward simulation per group for each posterior evaluation, which is very costly.",
+    "method": "Train a triangular transport-map likelihood once per experimental design and reuse it, inferring wetting parameters from photos of a stable hole in a thin liquid film.",
+    "result": "Posteriors match direct sampling at the validation design, with several hundred times fewer forward solves per posterior and about five orders of magnitude fewer across 200 posteriors; agreement is weaker at a larger-scale design."
+   },
+   "why": "A rigorous way to infer contact-angle parameters from images with uncertainty, which could set the static and dynamic angles in your three-phase contact-line cases instead of hand-tuning them."
+  },
+  {
+   "title": "Bouncing or Merging in Drop-Bath Impacts",
+   "authors": "P. Lewin-Jones, D. M. Harris, R. Cimpeanu",
+   "venue": "arXiv (physics.flu-dyn)",
+   "date": "2026-11-06",
+   "url": "https://arxiv.org/abs/2611.07942",
+   "tags": [
+    "Droplet",
+    "Air film"
+   ],
+   "relevance": 3,
+   "hasAbstract": false,
+   "summary": {
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: a study of when a drop hitting a liquid bath bounces off it and when it merges.",
+    "result": "Open the paper to see results."
+   },
+   "why": "Bounce-or-merge depends on draining a thin air layer, the same sub-cell gas-film issue as requirement 3; this group's earlier work paired experiments with Basilisk DNS of the film."
+  },
+  {
+   "title": "Some analytical solutions for the evaporative flux and the flow inside a sessile droplet in cylindrical-cap geometry",
+   "authors": "L. Ó Náraigh, C. Quigley",
+   "venue": "arXiv (physics.flu-dyn)",
+   "date": "2026-11-11",
+   "url": "https://arxiv.org/abs/2611.14224",
+   "tags": [
+    "Contact line",
+    "Droplet",
+    "Analytical"
+   ],
+   "relevance": 2,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "2D vapour-diffusion models of evaporating droplets need an arbitrary far-field boundary because of a singularity.",
+    "method": "Conformal mapping gives an explicit evaporative flux for any contact angle, coupled to internal Stokes flow with an analysis near the contact line.",
+    "result": "The abstract gives no numbers; it shows the flux diverges at the contact line with the same power law as the 3D spherical-cap case for angles below 90°."
+   },
+   "why": "Closed-form 2D solutions with a contact line at arbitrary angle are rare; one could serve as a verification case for your 2D three-phase contact-line setup."
+  }
+ ]
+}
