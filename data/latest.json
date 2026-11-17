@@ -1,233 +1,196 @@
 {
- "generated": "2026-11-16",
- "window": "Papers published since 2 Oct 2026",
- "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them. This run could not reach the OpenAlex API, so it used web search, the Physics of Fluids current-issue feed and arXiv instead; coverage of JCP, JFM and IJMF is thinner than usual.",
+ "generated": "2026-11-17",
+ "window": "Papers published since 3 Oct 2026",
+ "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them. Today's search sources were partly blocked, so this list is shorter than usual and repeats 4 strong items from yesterday.",
  "items": [
   {
-   "title": "Correcting a capillary-number sign pitfall in Kistler dynamic contact-angle modeling",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-10",
-   "url": "https://doi.org/10.1063/5.0360838",
+   "title": "Experimental study of thermally induced cavity evolution and periodic layered cavities during water entry of heated cylinders",
+   "authors": "H. Wu, H. Qi, Y. Zhang et al.",
+   "venue": "Physics of Fluids 38(11), 117407",
+   "date": "2026-11-03",
+   "url": "https://doi.org/10.1063/5.0349968",
    "tags": [
-    "Contact line",
-    "VOF"
+    "Water entry",
+    "Cavity"
    ],
    "relevance": 5,
    "hasAbstract": true,
    "summary": {
-    "problem": "The common Kistler dynamic contact-angle implementation uses the magnitude of the capillary number, so it loses the sign that distinguishes advancing from receding contact lines.",
+    "problem": "How does heating a cylinder change the air cavity it opens when it enters water at high speed?",
+    "method": "Water-entry experiments over a range of cylinder temperatures, entry speeds and diameters, with cavity shapes reconstructed from high-speed images using a Logvinovich-type model.",
+    "result": "A hotter cylinder generally made the cavity grow longer along its axis and delayed pinch-off, while maximum cavity diameter and pinch-off depth changed little (the abstract gives no numbers)."
+   },
+   "why": "Heating changes the gas layer and effective wetting at the moving solid, so this is a fresh experimental data set for your proposal's 'contact angle on a moving solid' and 'sub-cell gas layer' requirements, and a possible validation target for the air film in your solver."
+  },
+  {
+   "title": "Parametrised-Quadratic Interface Reconstruction and Geometric Velocity Extension in the Volume-of-Fluid Framework",
+   "authors": "Authors not retrieved — see paper",
+   "venue": "arXiv 2611.20802",
+   "date": "2026-11",
+   "url": "https://arxiv.org/abs/2611.20802",
+   "tags": [
+    "VOF / PLIC",
+    "Curvature"
+   ],
+   "relevance": 5,
+   "hasAbstract": false,
+   "summary": {
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: a quadratic (curved) interface reconstruction for VOF, paired with a geometric way to extend velocity off the interface.",
+    "result": "Open the paper to see results."
+   },
+   "why": "A direct step beyond PLIC: worth comparing against PLIC-Net and your curvature / spurious-current tests, since curved reconstruction is the usual answer to PLIC's curvature error."
+  },
+  {
+   "authors": "Authors not listed in the journal feed",
+   "date": "2026-11-10",
+   "hasAbstract": true,
+   "relevance": 5,
+   "summary": {
     "method": "The authors keep the sign in a modified formulation and test both versions in volume-of-fluid simulations of droplet impact and bubble coalescence.",
+    "problem": "The common Kistler dynamic contact-angle implementation uses the magnitude of the capillary number, so it loses the sign that distinguishes advancing from receding contact lines.",
     "result": "The magnitude-based model mispredicts droplet recoil and suppresses bubble detachment, while the corrected model captures both."
    },
+   "tags": [
+    "Contact line",
+    "VOF"
+   ],
+   "title": "Correcting a capillary-number sign pitfall in Kistler dynamic contact-angle modeling",
+   "url": "https://doi.org/10.1063/5.0360838",
+   "venue": "Physics of Fluids",
    "why": "Directly relevant to the contact angle on a moving solid in your proposal: during water entry the contact line on the sphere both advances and recedes, so check whether your Kistler/Cox–Voinov implementation keeps the sign of Ca."
   },
   {
-   "title": "A Data-Free Physics-Informed Neural Operator for Level-Set Interface Advection",
+   "title": "Feature-preserving interface reconstruction using piecewise circles and cusps",
+   "authors": "Authors not retrieved — see paper",
+   "venue": "arXiv 2610.41305",
+   "date": "2026-10",
+   "url": "https://arxiv.org/abs/2610.41305",
+   "tags": [
+    "VOF / PLIC",
+    "Interface reconstruction"
+   ],
+   "relevance": 4,
+   "hasAbstract": false,
+   "summary": {
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: an interface reconstruction that uses circular arcs and cusps so sharp features are kept instead of smoothed away.",
+    "result": "Open the paper to see results."
+   },
+   "why": "Sharp corners are exactly what appear where the free surface meets a moving solid at the contact line; check whether its cusp handling could help your three-phase reconstruction cases."
+  },
+  {
    "authors": "M. A. Khan",
-   "venue": "arXiv",
    "date": "2026-09",
-   "url": "https://arxiv.org/abs/2609.38195",
+   "hasAbstract": true,
+   "relevance": 4,
+   "summary": {
+    "method": "A spacetime Fourier neural operator maps an initial interface to its whole trajectory, trained only on the transport residual plus an eikonal term, with the initial condition built in by construction.",
+    "problem": "Neural operators for moving interfaces usually need training data from the very solver they replace, and field-norm error metrics miss how far the interface has actually moved.",
+    "result": "On a reversed vortex it reaches about 1.6% relative L2 error versus 0.37% for a supervised baseline (4.4 times worse), but on solid-body rotation it conserves enclosed area 2.7 times better."
+   },
    "tags": [
     "ML",
     "Interface"
    ],
-   "relevance": 4,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Neural operators for moving interfaces usually need training data from the very solver they replace, and field-norm error metrics miss how far the interface has actually moved.",
-    "method": "A spacetime Fourier neural operator maps an initial interface to its whole trajectory, trained only on the transport residual plus an eikonal term, with the initial condition built in by construction.",
-    "result": "On a reversed vortex it reaches about 1.6% relative L2 error versus 0.37% for a supervised baseline (4.4 times worse), but on solid-body rotation it conserves enclosed area 2.7 times better."
-   },
+   "title": "A Data-Free Physics-Informed Neural Operator for Level-Set Interface Advection",
+   "url": "https://arxiv.org/abs/2609.38195",
+   "venue": "arXiv",
    "why": "A useful contrast for PLIC-Net: it argues for interface-displacement and area-conservation metrics rather than field norms, which is the same point you would make about volume conservation in learned VOF reconstruction."
   },
   {
-   "title": "SUMNO: Spatially Unrolled Multigrid Neural Operator for Fluid Flow Surrogates",
-   "authors": "Y. Hu, N. Deng, C. Shao",
-   "venue": "arXiv",
-   "date": "2026-11-12",
-   "url": "https://arxiv.org/abs/2611.16341",
+   "title": "Droplet sliding modulated by Marangoni effect on an inclined miscible liquid film",
+   "authors": "Authors not retrieved — see paper",
+   "venue": "Physics of Fluids 38(11), 112101",
+   "date": "2026-11",
+   "url": "https://pubs.aip.org/aip/pof/article-abstract/38/11/112101/3407841/Droplet-sliding-modulated-by-Marangoni-effect-on",
    "tags": [
-    "ML",
-    "Poisson/multigrid"
+    "Droplets",
+    "Wetting"
    ],
    "relevance": 3,
-   "hasAbstract": true,
+   "hasAbstract": false,
    "summary": {
-    "problem": "U-shaped neural surrogates borrow the multigrid layout but their inner parts follow generic vision designs, and accurate prediction of complex flows is still hard.",
-    "method": "The authors turn a multigrid V-cycle into a feed-forward network with parameter-free restriction/prolongation, additive skips, convolutions on fine grids and shifted-window attention on the coarsest grid.",
-    "result": "Across four flow benchmarks it ranks first in 5 of 7 settings, cuts 10-step rollout error by about 30% versus the best baseline, and uses only 9.4 million parameters against baselines over 130 million."
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: a study of how surface-tension gradients (Marangoni flow) change a droplet sliding down a tilted liquid film.",
+    "result": "Open the paper to see results."
    },
-   "why": "Connects your Poisson condition-number note to the ML thread: a network built to mimic a V-cycle is a natural candidate for a learned preconditioner or initial guess for the variable-density pressure solve."
+   "why": "Sliding drops are a classic dynamic-wetting test; useful background if you extend your contact-line validation set beyond static spreading."
   },
   {
-   "title": "DynaSolver: A Neural Operator for Autoregressive 4D Flow Prediction with Dynamic Boundaries",
-   "authors": "R. Qian, S. Dai, M. Lin et al.",
-   "venue": "arXiv",
-   "date": "2026-11-02",
-   "url": "https://arxiv.org/abs/2611.03595",
+   "title": "Effects of anisotropic confinement on droplet rebound from superhydrophobic surfaces",
+   "authors": "Authors not retrieved — see paper",
+   "venue": "Physics of Fluids 38(10), 107412",
+   "date": "2026-10",
+   "url": "https://pubs.aip.org/aip/pof/article/38/10/107412/3406211/Effects-of-anisotropic-confinement-on-droplet",
    "tags": [
-    "ML",
-    "Moving bodies"
+    "Droplet impact",
+    "Superhydrophobic"
    ],
    "relevance": 3,
-   "hasAbstract": true,
+   "hasAbstract": false,
    "summary": {
-    "problem": "Most neural CFD surrogates assume a fixed geometry, so they cannot predict unsteady flow around continuously moving boundaries.",
-    "method": "DynaSolver conditions on boundary motion and flow history through compact physical tokens and is trained with replay-augmented parallel training on its own rollouts.",
-    "result": "The abstract gives no numbers but reports the best full-rollout accuracy on the RoboCFD-4D benchmark, with the advantage growing over longer rollouts."
+    "problem": "Title only — abstract not available.",
+    "method": "From the title: how confining a droplet unevenly changes how it bounces off a superhydrophobic surface.",
+    "result": "Open the paper to see results."
    },
-   "why": "Single-phase, but it tackles the same 'solid moving without remeshing' requirement from the learning side; worth a sentence in the ML outlook of your review."
+   "why": "Rebound on superhydrophobic walls stresses the high-contact-angle limit of a wetting model — the same regime as hydrophobic spheres in water entry."
   },
   {
-   "title": "Axisymmetric numerical simulation of a conducting drop impact onto a deep pool under a vertical uniform magnetic field: Capillary wave propagation on the main drop side",
    "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
    "date": "2026-11-12",
-   "url": "https://doi.org/10.1063/5.0345006",
+   "hasAbstract": true,
+   "relevance": 3,
+   "summary": {
+    "method": "Axisymmetric VOF simulations with adaptive mesh refinement over a wide range of Reynolds and Weber numbers.",
+    "problem": "The surface-wave patterns produced when a liquid-metal drop hits a deep pool under a vertical magnetic field are not well classified.",
+    "result": "Phase diagrams separate single-wave, multi-wave and small-eddy regimes, and a stronger magnetic field shifts the regime boundaries."
+   },
    "tags": [
     "Drop impact",
     "VOF"
    ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "The surface-wave patterns produced when a liquid-metal drop hits a deep pool under a vertical magnetic field are not well classified.",
-    "method": "Axisymmetric VOF simulations with adaptive mesh refinement over a wide range of Reynolds and Weber numbers.",
-    "result": "Phase diagrams separate single-wave, multi-wave and small-eddy regimes, and a stronger magnetic field shifts the regime boundaries."
-   },
+   "title": "Axisymmetric numerical simulation of a conducting drop impact onto a deep pool under a vertical uniform magnetic field: Capillary wave propagation on the main drop side",
+   "url": "https://doi.org/10.1063/5.0345006",
+   "venue": "Physics of Fluids",
    "why": "Impact onto a deep pool with crater and capillary waves is the liquid analogue of your water-entry cavity cases; their AMR/VOF regime maps are a good template for presenting parameter sweeps."
   },
   {
-   "title": "Effect of superhydrophobic obstacles on the impact dynamics of a shear-thinning droplet",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-10",
-   "url": "https://doi.org/10.1063/5.0358003",
-   "tags": [
-    "Wetting",
-    "Curved solids"
-   ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "How the curvature of a superhydrophobic obstacle changes the impact of a shear-thinning droplet.",
-    "method": "Numerical simulations of droplets hitting cube, cylinder and hemisphere obstacles, analysed with deformation, anisotropy, energy budgets and curvature indices.",
-    "result": "Contact persists at low Weber number, detachment is intermittent at intermediate values and rapid at high values; the hemisphere gives the largest kinetic-energy gain during retraction."
-   },
-   "why": "Wetting on curved solids is topic 3 of your list; check how they impose the contact angle on non-grid-aligned curved walls, the same problem as on your sphere."
-  },
-  {
-   "title": "Coalescence mechanisms of micro- and nanobubbles: Insights from in situ imaging and multiphysics modeling",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-13",
-   "url": "https://doi.org/10.1063/5.0358793",
-   "tags": [
-    "Bubbles",
-    "VOF"
-   ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Nanobubble coalescence, which can turn stable nanobubbles into microbubbles, is poorly understood.",
-    "method": "High-resolution in situ imaging with machine-learning image recognition, combined with VOF simulations.",
-    "result": "Nanobubbles coalesce much more slowly than microbubbles, and VOF simulations match the observed film drainage better than no-slip models."
-   },
-   "why": "Thin-film drainage between interfaces is the same physics as the air film in your solver; their comparison of slip assumptions bears on your sub-cell gas-layer rule."
-  },
-  {
-   "title": "EDP-PI-DOSnet: An Energy Dissipation Preserving Neural Solver for Two-Phase Flow Problems",
    "authors": "See paper",
-   "venue": "arXiv",
    "date": "2026-11",
-   "url": "https://arxiv.org/abs/2611.09430",
+   "hasAbstract": false,
+   "relevance": 3,
+   "summary": {
+    "method": "From the title: a physics-informed neural solver for two-phase flow designed to preserve the energy-dissipation law.",
+    "problem": "Title only — abstract not available.",
+    "result": "Open the paper to see results."
+   },
    "tags": [
     "ML",
     "Two-phase"
    ],
-   "relevance": 3,
-   "hasAbstract": false,
-   "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: a physics-informed neural solver for two-phase flow designed to preserve the energy-dissipation law.",
-    "result": "Open the paper to see results."
-   },
+   "title": "EDP-PI-DOSnet: An Energy Dissipation Preserving Neural Solver for Two-Phase Flow Problems",
+   "url": "https://arxiv.org/abs/2611.09430",
+   "venue": "arXiv",
    "why": "If it targets phase-field/two-phase PDEs with a structure-preserving loss, it is a direct comparison point for PINN-with-VOF work; read before citing."
   },
   {
-   "title": "Accelerating matrix-free fast diagonalization and preconditioned linear solvers for high-order finite element discretized elliptic problems on distributed GPUs",
-   "authors": "See paper",
-   "venue": "arXiv",
-   "date": "2026-11",
-   "url": "https://arxiv.org/abs/2611.14041",
+   "title": "Numerical Modeling of a Metallic Alloy Droplet Impact",
+   "authors": "Authors not retrieved — see paper",
+   "venue": "arXiv 2610.15381",
+   "date": "2026-10",
+   "url": "https://arxiv.org/abs/2610.15381",
    "tags": [
-    "Poisson/multigrid"
+    "Droplet impact"
    ],
-   "relevance": 3,
+   "relevance": 2,
    "hasAbstract": false,
    "summary": {
     "problem": "Title only — abstract not available.",
-    "method": "From the title: GPU-accelerated matrix-free fast-diagonalization preconditioners for high-order finite-element elliptic (Poisson-type) problems.",
+    "method": "From the title: numerical simulation of a molten metallic-alloy droplet hitting a surface.",
     "result": "Open the paper to see results."
    },
-   "why": "Relevant to the pressure-solve cost discussion in your Poisson note and as a classical baseline for the quantum solver study; check whether it handles variable coefficients."
-  },
-  {
-   "title": "Wall-mobility effects on evaporation feedback in a droplet model inspired by surface acoustic waves",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-13",
-   "url": "https://doi.org/10.1063/5.0358377",
-   "tags": [
-    "Contact line",
-    "Slip"
-   ],
-   "relevance": 2,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Ignoring evaporation in acoustically deformed droplets causes an interface error that depends on how easily liquid slides along the wall.",
-    "method": "A verified axisymmetric long-wave model with evaporation, thermocapillarity, precursor films and wall slip (no-slip, Navier and threshold slip).",
-    "result": "Mobile walls (Navier and threshold slip) shift the evaporation-error crossing more under acoustic forcing than no-slip walls."
-   },
-   "why": "Shows quantitatively how the slip model at the contact line changes outcomes, a point to raise when you discuss mesh dependence and slip length in contact-line models."
-  },
-  {
-   "title": "Dynamic wetting characteristics of nanoscale water films on regular textured surfaces under periodic vibration",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-11",
-   "url": "https://doi.org/10.1063/5.0352988",
-   "tags": [
-    "Wetting"
-   ],
-   "relevance": 2,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "How vibration amplitude and period control the wetting of nanoscale water films on grooved surfaces.",
-    "method": "Molecular dynamics with free-energy analysis, molecular velocity statistics and phase diagrams.",
-    "result": "Five wetting outcomes are found, and the transition boundary follows a scaling law whose constant depends on film thickness, groove aspect ratio and Young's contact angle."
-   },
-   "why": "Molecular-scale background for contact-angle hysteresis and pinning on textured, moving surfaces; useful for the physics section of the review rather than the methods."
-  },
-  {
-   "title": "Two-phase flow simulations of surface waves and turbulence underneath",
-   "authors": "Authors not listed in the journal feed",
-   "venue": "Physics of Fluids",
-   "date": "2026-11-10",
-   "url": "https://doi.org/10.1063/5.0353041",
-   "tags": [
-    "Two-phase",
-    "Turbulence"
-   ],
-   "relevance": 2,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "How surface waves interact with countercurrent turbulence beneath the air-water interface.",
-    "method": "A hybrid scale-resolving method that resolves both air and water, with synthetic turbulence generation.",
-    "result": "Waves amplify near-surface streamwise enstrophy by up to 6 times, and pressure drag scales with the square of wave slope."
-   },
-   "why": "Background for turbulence near a free surface; lower priority, but a reference if your water-entry cases reach turbulent cavity closure."
+   "why": "Lower priority; a possible extra example of large density-ratio impact if you need cases for the Poisson conditioning note."
   }
  ]
 }
