@@ -1,45 +1,47 @@
 {
- "generated": "2026-11-17",
- "window": "Papers published since 3 Oct 2026",
- "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them. Today's search sources were partly blocked, so this list is shorter than usual and repeats 4 strong items from yesterday.",
+ "generated": "2026-11-18",
+ "window": "Papers published since 4 Oct 2026 (plus two late-September preprints kept for high relevance)",
+ "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them.",
  "items": [
   {
-   "title": "Experimental study of thermally induced cavity evolution and periodic layered cavities during water entry of heated cylinders",
-   "authors": "H. Wu, H. Qi, Y. Zhang et al.",
-   "venue": "Physics of Fluids 38(11), 117407",
-   "date": "2026-11-03",
-   "url": "https://doi.org/10.1063/5.0349968",
+   "title": "A Preconditioned Quantum Linear Solver for Periodic Two-Phase Heat Conduction with Mesh-Independent Condition Number",
+   "authors": "K. Suresh",
+   "venue": "arXiv preprint",
+   "date": "2026-11-02",
+   "url": "https://arxiv.org/abs/2610.41690",
    "tags": [
-    "Water entry",
-    "Cavity"
+    "Quantum solvers",
+    "Conditioning",
+    "Two-phase"
    ],
    "relevance": 5,
    "hasAbstract": true,
    "summary": {
-    "problem": "How does heating a cylinder change the air cavity it opens when it enters water at high speed?",
-    "method": "Water-entry experiments over a range of cylinder temperatures, entry speeds and diameters, with cavity shapes reconstructed from high-speed images using a Logvinovich-type model.",
-    "result": "A hotter cylinder generally made the cavity grow longer along its axis and delayed pinch-off, while maximum cavity diameter and pinch-off depth changed little (the abstract gives no numbers)."
+    "problem": "Quantum linear solvers slow down under mesh refinement because the finite element stiffness matrix of a two-phase conduction problem has a condition number that grows quadratically with elements per side.",
+    "method": "The closed-form inverse square root of the homogeneous operator is folded into the finite element factors so the preconditioned operator has subnormalization one, and QSVT block-encodes its inverse.",
+    "result": "On three periodic cells with up to 10^6 unknowns the condition number stayed mesh-independent, and Qiskit state-vector runs on 4×4 and 8×8 meshes matched the classical solution within the polynomial tolerance."
    },
-   "why": "Heating changes the gas layer and effective wetting at the moving solid, so this is a fresh experimental data set for your proposal's 'contact angle on a moving solid' and 'sub-cell gas layer' requirements, and a possible validation target for the air film in your solver."
+   "why": "This is the exact obstacle in your quantum pressure solver study and Poisson condition-number note: a two-phase coefficient jump plus mesh refinement drives kappa up. Check whether the homogeneous-operator preconditioning idea survives a 1000:1 density ratio in the variable-density pressure Poisson equation."
   },
   {
-   "title": "Parametrised-Quadratic Interface Reconstruction and Geometric Velocity Extension in the Volume-of-Fluid Framework",
-   "authors": "Authors not retrieved — see paper",
-   "venue": "arXiv 2611.20802",
-   "date": "2026-11",
-   "url": "https://arxiv.org/abs/2611.20802",
+   "title": "A generalized, quasi-universal subgrid model for macroscopic moving contact line flows",
+   "authors": "V. M. Mundhada, M. K. Tripathi",
+   "venue": "arXiv preprint",
+   "date": "2026-09",
+   "url": "https://arxiv.org/abs/2609.34998",
    "tags": [
-    "VOF / PLIC",
-    "Curvature"
+    "Contact line",
+    "Dynamic contact angle",
+    "Mesh dependence"
    ],
    "relevance": 5,
-   "hasAbstract": false,
+   "hasAbstract": true,
    "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: a quadratic (curved) interface reconstruction for VOF, paired with a geometric way to extend velocity off the interface.",
-    "result": "Open the paper to see results."
+    "problem": "The no-slip stress singularity at a moving contact line makes macroscopic simulations grid-dependent, and resolving the microscopic scale is unaffordable.",
+    "method": "Cox's matched-asymptotic relation is coupled with empirical dynamic contact angle models into a subgrid model that needs only a one-time estimate of the observation length scale.",
+    "result": "Grid-dependence errors dropped across a wide range of Reynolds and Weber numbers for three contact angle models; the abstract gives no specific numbers."
    },
-   "why": "A direct step beyond PLIC: worth comparing against PLIC-Net and your curvature / spurious-current tests, since curved reconstruction is the usual answer to PLIC's curvature error."
+   "why": "Directly feeds your proposal's fourth requirement (a contact angle on a moving solid) and the Cox–Voinov/mesh-dependence section; worth testing whether the one-time length scale holds on a translating sphere surface in your three-phase contact line cases."
   },
   {
    "authors": "Authors not listed in the journal feed",
@@ -61,136 +63,139 @@
    "why": "Directly relevant to the contact angle on a moving solid in your proposal: during water entry the contact line on the sphere both advances and recedes, so check whether your Kistler/Cox–Voinov implementation keeps the sign of Ca."
   },
   {
-   "title": "Feature-preserving interface reconstruction using piecewise circles and cusps",
    "authors": "Authors not retrieved — see paper",
-   "venue": "arXiv 2610.41305",
+   "date": "2026-11",
+   "hasAbstract": false,
+   "relevance": 5,
+   "summary": {
+    "method": "From the title: a quadratic (curved) interface reconstruction for VOF, paired with a geometric way to extend velocity off the interface.",
+    "problem": "Title only — abstract not available.",
+    "result": "Open the paper to see results."
+   },
+   "tags": [
+    "VOF / PLIC",
+    "Curvature"
+   ],
+   "title": "Parametrised-Quadratic Interface Reconstruction and Geometric Velocity Extension in the Volume-of-Fluid Framework",
+   "url": "https://arxiv.org/abs/2611.20802",
+   "venue": "arXiv 2611.20802",
+   "why": "A direct step beyond PLIC: worth comparing against PLIC-Net and your curvature / spurious-current tests, since curved reconstruction is the usual answer to PLIC's curvature error."
+  },
+  {
+   "authors": "H. Wu, H. Qi, Y. Zhang et al.",
+   "date": "2026-11-03",
+   "hasAbstract": true,
+   "relevance": 5,
+   "summary": {
+    "method": "Water-entry experiments over a range of cylinder temperatures, entry speeds and diameters, with cavity shapes reconstructed from high-speed images using a Logvinovich-type model.",
+    "problem": "How does heating a cylinder change the air cavity it opens when it enters water at high speed?",
+    "result": "A hotter cylinder generally made the cavity grow longer along its axis and delayed pinch-off, while maximum cavity diameter and pinch-off depth changed little (the abstract gives no numbers)."
+   },
+   "tags": [
+    "Water entry",
+    "Cavity"
+   ],
+   "title": "Experimental study of thermally induced cavity evolution and periodic layered cavities during water entry of heated cylinders",
+   "url": "https://doi.org/10.1063/5.0349968",
+   "venue": "Physics of Fluids 38(11), 117407",
+   "why": "Heating changes the gas layer and effective wetting at the moving solid, so this is a fresh experimental data set for your proposal's 'contact angle on a moving solid' and 'sub-cell gas layer' requirements, and a possible validation target for the air film in your solver."
+  },
+  {
+   "title": "A QSVT-Based Quantum Jacobi Algorithm for Linear Systems with Application to the Poisson Equation",
+   "authors": "L. M. Piskol, T. Grahs, S. Langer",
+   "venue": "arXiv preprint",
+   "date": "2026-09-21",
+   "url": "https://arxiv.org/abs/2609.24266",
+   "tags": [
+    "Quantum solvers",
+    "Pressure Poisson"
+   ],
+   "relevance": 4,
+   "hasAbstract": true,
+   "summary": {
+    "problem": "CFD discretizations give large sparse linear systems, yet most quantum solvers aim at full matrix inversion rather than iterative approximation.",
+    "method": "Each Jacobi iteration is written as a polynomial transformation of a block-encoded operator and implemented with quantum singular value transformation.",
+    "result": "Ancilla overhead stays constant regardless of iteration count while circuit depth grows linearly; demonstrated on 1D/2D Poisson problems including the Chorin-projection pressure equation for lid-driven cavity flow."
+   },
+   "why": "A projection-method pressure Poisson test case is the closest published analogue to your quantum pressure solver study; an iterative (Jacobi/smoother-style) framing also links naturally to your multigrid discussion."
+  },
+  {
+   "authors": "Authors not retrieved — see paper",
    "date": "2026-10",
-   "url": "https://arxiv.org/abs/2610.41305",
+   "hasAbstract": false,
+   "relevance": 4,
+   "summary": {
+    "method": "From the title: an interface reconstruction that uses circular arcs and cusps so sharp features are kept instead of smoothed away.",
+    "problem": "Title only — abstract not available.",
+    "result": "Open the paper to see results."
+   },
    "tags": [
     "VOF / PLIC",
     "Interface reconstruction"
    ],
-   "relevance": 4,
-   "hasAbstract": false,
-   "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: an interface reconstruction that uses circular arcs and cusps so sharp features are kept instead of smoothed away.",
-    "result": "Open the paper to see results."
-   },
+   "title": "Feature-preserving interface reconstruction using piecewise circles and cusps",
+   "url": "https://arxiv.org/abs/2610.41305",
+   "venue": "arXiv 2610.41305",
    "why": "Sharp corners are exactly what appear where the free surface meets a moving solid at the contact line; check whether its cusp handling could help your three-phase reconstruction cases."
   },
   {
-   "authors": "M. A. Khan",
-   "date": "2026-09",
-   "hasAbstract": true,
-   "relevance": 4,
-   "summary": {
-    "method": "A spacetime Fourier neural operator maps an initial interface to its whole trajectory, trained only on the transport residual plus an eikonal term, with the initial condition built in by construction.",
-    "problem": "Neural operators for moving interfaces usually need training data from the very solver they replace, and field-norm error metrics miss how far the interface has actually moved.",
-    "result": "On a reversed vortex it reaches about 1.6% relative L2 error versus 0.37% for a supervised baseline (4.4 times worse), but on solid-body rotation it conserves enclosed area 2.7 times better."
-   },
+   "title": "Accelerating Matrix-Free Fast Diagonalization and Preconditioned Linear Solvers for High-Order Finite Element Discretized Elliptic Problems on Distributed GPUs",
+   "authors": "G. Panigrahi, P. Motamarri",
+   "venue": "arXiv preprint",
+   "date": "2026-10-31",
+   "url": "https://arxiv.org/abs/2611.14041",
    "tags": [
-    "ML",
-    "Interface"
-   ],
-   "title": "A Data-Free Physics-Informed Neural Operator for Level-Set Interface Advection",
-   "url": "https://arxiv.org/abs/2609.38195",
-   "venue": "arXiv",
-   "why": "A useful contrast for PLIC-Net: it argues for interface-displacement and area-conservation metrics rather than field norms, which is the same point you would make about volume conservation in learned VOF reconstruction."
-  },
-  {
-   "title": "Droplet sliding modulated by Marangoni effect on an inclined miscible liquid film",
-   "authors": "Authors not retrieved — see paper",
-   "venue": "Physics of Fluids 38(11), 112101",
-   "date": "2026-11",
-   "url": "https://pubs.aip.org/aip/pof/article-abstract/38/11/112101/3407841/Droplet-sliding-modulated-by-Marangoni-effect-on",
-   "tags": [
-    "Droplets",
-    "Wetting"
+    "Poisson solver",
+    "Multigrid",
+    "Preconditioning"
    ],
    "relevance": 3,
-   "hasAbstract": false,
+   "hasAbstract": true,
    "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: a study of how surface-tension gradients (Marangoni flow) change a droplet sliding down a tilted liquid film.",
-    "result": "Open the paper to see results."
+    "problem": "High-order finite element elliptic solves on distributed GPUs need both fewer iterations and cheaper iterations.",
+    "method": "A distributed fast-diagonalization direct Poisson solver is combined with two matrix-free CG preconditioners: p-multigrid with Chebyshev–Jacobi smoothing and a two-level hybrid Schwarz method.",
+    "result": "The direct solver is 100–1000× faster than Jacobi-preconditioned CG on uniform meshes, and hybrid Schwarz converges in 11 iterations on an octree generalized Poisson problem from 8 to 1024 MI250X GPUs."
    },
-   "why": "Sliding drops are a classic dynamic-wetting test; useful background if you extend your contact-line validation set beyond static spreading."
+   "why": "Useful benchmark numbers for the preconditioning part of your Poisson note; the generalized (variable-coefficient) octree case is the nearest to a density-jump pressure equation."
   },
   {
-   "title": "Effects of anisotropic confinement on droplet rebound from superhydrophobic surfaces",
-   "authors": "Authors not retrieved — see paper",
-   "venue": "Physics of Fluids 38(10), 107412",
+   "title": "Influence of Droplet Morphology on Fluid Dynamics and Impact Erosion of Wind Turbine Blades",
+   "authors": "H. Hao, A. Sergis, M. N. Charalambides",
+   "venue": "arXiv preprint",
    "date": "2026-10",
-   "url": "https://pubs.aip.org/aip/pof/article/38/10/107412/3406211/Effects-of-anisotropic-confinement-on-droplet",
+   "url": "https://arxiv.org/abs/2610.23178",
    "tags": [
     "Droplet impact",
-    "Superhydrophobic"
-   ],
-   "relevance": 3,
-   "hasAbstract": false,
-   "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: how confining a droplet unevenly changes how it bounces off a superhydrophobic surface.",
-    "result": "Open the paper to see results."
-   },
-   "why": "Rebound on superhydrophobic walls stresses the high-contact-angle limit of a wetting model — the same regime as hydrophobic spheres in water entry."
-  },
-  {
-   "authors": "Authors not listed in the journal feed",
-   "date": "2026-11-12",
-   "hasAbstract": true,
-   "relevance": 3,
-   "summary": {
-    "method": "Axisymmetric VOF simulations with adaptive mesh refinement over a wide range of Reynolds and Weber numbers.",
-    "problem": "The surface-wave patterns produced when a liquid-metal drop hits a deep pool under a vertical magnetic field are not well classified.",
-    "result": "Phase diagrams separate single-wave, multi-wave and small-eddy regimes, and a stronger magnetic field shifts the regime boundaries."
-   },
-   "tags": [
-    "Drop impact",
+    "FSI",
     "VOF"
    ],
-   "title": "Axisymmetric numerical simulation of a conducting drop impact onto a deep pool under a vertical uniform magnetic field: Capillary wave propagation on the main drop side",
-   "url": "https://doi.org/10.1063/5.0345006",
-   "venue": "Physics of Fluids",
-   "why": "Impact onto a deep pool with crater and capillary waves is the liquid analogue of your water-entry cavity cases; their AMR/VOF regime maps are a good template for presenting parameter sweeps."
-  },
-  {
-   "authors": "See paper",
-   "date": "2026-11",
-   "hasAbstract": false,
    "relevance": 3,
+   "hasAbstract": true,
    "summary": {
-    "method": "From the title: a physics-informed neural solver for two-phase flow designed to preserve the energy-dissipation law.",
-    "problem": "Title only — abstract not available.",
-    "result": "Open the paper to see results."
+    "problem": "Erosion models for wind turbine blades assume spherical droplets hitting at normal incidence, which rarely happens.",
+    "method": "Incompressible VOF multiphase simulations are coupled with finite element analysis of the blade material in a fluid-structure interaction model.",
+    "result": "Peak impact pressure, influential area and peak force are positively correlated while time of peak force scales inversely; a scaling law based on droplet projection area is proposed (no numbers in the abstract)."
    },
-   "tags": [
-    "ML",
-    "Two-phase"
-   ],
-   "title": "EDP-PI-DOSnet: An Energy Dissipation Preserving Neural Solver for Two-Phase Flow Problems",
-   "url": "https://arxiv.org/abs/2611.09430",
-   "venue": "arXiv",
-   "why": "If it targets phase-field/two-phase PDEs with a structure-preserving loss, it is a direct comparison point for PINN-with-VOF work; read before citing."
+   "why": "A VOF-to-FE partitioned coupling example for impact loading; a handy contrast case for the FSI coupling section of your review, though the solid is fixed rather than moving."
   },
   {
-   "title": "Numerical Modeling of a Metallic Alloy Droplet Impact",
-   "authors": "Authors not retrieved — see paper",
-   "venue": "arXiv 2610.15381",
+   "title": "Droplet-triggered Faraday waves in a vertically forced bath",
+   "authors": "F. T. Mahmood, C. R. Constante-Amores",
+   "venue": "arXiv preprint",
    "date": "2026-10",
-   "url": "https://arxiv.org/abs/2610.15381",
+   "url": "https://arxiv.org/abs/2610.05596",
    "tags": [
-    "Droplet impact"
+    "Droplet dynamics",
+    "DNS"
    ],
-   "relevance": 2,
-   "hasAbstract": false,
+   "relevance": 3,
+   "hasAbstract": true,
    "summary": {
-    "problem": "Title only — abstract not available.",
-    "method": "From the title: numerical simulation of a molten metallic-alloy droplet hitting a surface.",
-    "result": "Open the paper to see results."
+    "problem": "Repeated droplet impacts can trigger a growing Faraday-wave response even when the undisturbed bath is linearly stable.",
+    "method": "Axisymmetric two-phase DNS over a wide range of Reynolds and Weber numbers, supported by Floquet analysis and a Bessel decomposition of the bath response.",
+    "result": "The switch to the unstable-bath regime happens over a comparatively narrow Weber-number range and depends only weakly on Reynolds number (no numbers in the abstract)."
    },
-   "why": "Lower priority; a possible extra example of large density-ratio impact if you need cases for the Poisson conditioning note."
+   "why": "Shows how impact-driven capillary waves near the air film evolve on a deforming pool; a good reference for droplet/bubble dynamics framing in job talks."
   }
  ]
 }
