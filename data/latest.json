@@ -1,201 +1,261 @@
 {
- "generated": "2026-11-18",
- "window": "Papers published since 4 Oct 2026 (plus two late-September preprints kept for high relevance)",
- "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them.",
- "items": [
-  {
-   "title": "A Preconditioned Quantum Linear Solver for Periodic Two-Phase Heat Conduction with Mesh-Independent Condition Number",
-   "authors": "K. Suresh",
-   "venue": "arXiv preprint",
-   "date": "2026-11-02",
-   "url": "https://arxiv.org/abs/2610.41690",
-   "tags": [
-    "Quantum solvers",
-    "Conditioning",
-    "Two-phase"
-   ],
-   "relevance": 5,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Quantum linear solvers slow down under mesh refinement because the finite element stiffness matrix of a two-phase conduction problem has a condition number that grows quadratically with elements per side.",
-    "method": "The closed-form inverse square root of the homogeneous operator is folded into the finite element factors so the preconditioned operator has subnormalization one, and QSVT block-encodes its inverse.",
-    "result": "On three periodic cells with up to 10^6 unknowns the condition number stayed mesh-independent, and Qiskit state-vector runs on 4×4 and 8×8 meshes matched the classical solution within the polynomial tolerance."
-   },
-   "why": "This is the exact obstacle in your quantum pressure solver study and Poisson condition-number note: a two-phase coefficient jump plus mesh refinement drives kappa up. Check whether the homogeneous-operator preconditioning idea survives a 1000:1 density ratio in the variable-density pressure Poisson equation."
-  },
-  {
-   "title": "A generalized, quasi-universal subgrid model for macroscopic moving contact line flows",
-   "authors": "V. M. Mundhada, M. K. Tripathi",
-   "venue": "arXiv preprint",
-   "date": "2026-09",
-   "url": "https://arxiv.org/abs/2609.34998",
-   "tags": [
-    "Contact line",
-    "Dynamic contact angle",
-    "Mesh dependence"
-   ],
-   "relevance": 5,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "The no-slip stress singularity at a moving contact line makes macroscopic simulations grid-dependent, and resolving the microscopic scale is unaffordable.",
-    "method": "Cox's matched-asymptotic relation is coupled with empirical dynamic contact angle models into a subgrid model that needs only a one-time estimate of the observation length scale.",
-    "result": "Grid-dependence errors dropped across a wide range of Reynolds and Weber numbers for three contact angle models; the abstract gives no specific numbers."
-   },
-   "why": "Directly feeds your proposal's fourth requirement (a contact angle on a moving solid) and the Cox–Voinov/mesh-dependence section; worth testing whether the one-time length scale holds on a translating sphere surface in your three-phase contact line cases."
-  },
-  {
-   "authors": "Authors not listed in the journal feed",
-   "date": "2026-11-10",
-   "hasAbstract": true,
-   "relevance": 5,
-   "summary": {
-    "method": "The authors keep the sign in a modified formulation and test both versions in volume-of-fluid simulations of droplet impact and bubble coalescence.",
-    "problem": "The common Kistler dynamic contact-angle implementation uses the magnitude of the capillary number, so it loses the sign that distinguishes advancing from receding contact lines.",
-    "result": "The magnitude-based model mispredicts droplet recoil and suppresses bubble detachment, while the corrected model captures both."
-   },
-   "tags": [
-    "Contact line",
-    "VOF"
-   ],
-   "title": "Correcting a capillary-number sign pitfall in Kistler dynamic contact-angle modeling",
-   "url": "https://doi.org/10.1063/5.0360838",
-   "venue": "Physics of Fluids",
-   "why": "Directly relevant to the contact angle on a moving solid in your proposal: during water entry the contact line on the sphere both advances and recedes, so check whether your Kistler/Cox–Voinov implementation keeps the sign of Ca."
-  },
-  {
-   "authors": "Authors not retrieved — see paper",
-   "date": "2026-11",
-   "hasAbstract": false,
-   "relevance": 5,
-   "summary": {
-    "method": "From the title: a quadratic (curved) interface reconstruction for VOF, paired with a geometric way to extend velocity off the interface.",
-    "problem": "Title only — abstract not available.",
-    "result": "Open the paper to see results."
-   },
-   "tags": [
-    "VOF / PLIC",
-    "Curvature"
-   ],
-   "title": "Parametrised-Quadratic Interface Reconstruction and Geometric Velocity Extension in the Volume-of-Fluid Framework",
-   "url": "https://arxiv.org/abs/2611.20802",
-   "venue": "arXiv 2611.20802",
-   "why": "A direct step beyond PLIC: worth comparing against PLIC-Net and your curvature / spurious-current tests, since curved reconstruction is the usual answer to PLIC's curvature error."
-  },
-  {
-   "authors": "H. Wu, H. Qi, Y. Zhang et al.",
-   "date": "2026-11-03",
-   "hasAbstract": true,
-   "relevance": 5,
-   "summary": {
-    "method": "Water-entry experiments over a range of cylinder temperatures, entry speeds and diameters, with cavity shapes reconstructed from high-speed images using a Logvinovich-type model.",
-    "problem": "How does heating a cylinder change the air cavity it opens when it enters water at high speed?",
-    "result": "A hotter cylinder generally made the cavity grow longer along its axis and delayed pinch-off, while maximum cavity diameter and pinch-off depth changed little (the abstract gives no numbers)."
-   },
-   "tags": [
-    "Water entry",
-    "Cavity"
-   ],
-   "title": "Experimental study of thermally induced cavity evolution and periodic layered cavities during water entry of heated cylinders",
-   "url": "https://doi.org/10.1063/5.0349968",
-   "venue": "Physics of Fluids 38(11), 117407",
-   "why": "Heating changes the gas layer and effective wetting at the moving solid, so this is a fresh experimental data set for your proposal's 'contact angle on a moving solid' and 'sub-cell gas layer' requirements, and a possible validation target for the air film in your solver."
-  },
-  {
-   "title": "A QSVT-Based Quantum Jacobi Algorithm for Linear Systems with Application to the Poisson Equation",
-   "authors": "L. M. Piskol, T. Grahs, S. Langer",
-   "venue": "arXiv preprint",
-   "date": "2026-09-21",
-   "url": "https://arxiv.org/abs/2609.24266",
-   "tags": [
-    "Quantum solvers",
-    "Pressure Poisson"
-   ],
-   "relevance": 4,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "CFD discretizations give large sparse linear systems, yet most quantum solvers aim at full matrix inversion rather than iterative approximation.",
-    "method": "Each Jacobi iteration is written as a polynomial transformation of a block-encoded operator and implemented with quantum singular value transformation.",
-    "result": "Ancilla overhead stays constant regardless of iteration count while circuit depth grows linearly; demonstrated on 1D/2D Poisson problems including the Chorin-projection pressure equation for lid-driven cavity flow."
-   },
-   "why": "A projection-method pressure Poisson test case is the closest published analogue to your quantum pressure solver study; an iterative (Jacobi/smoother-style) framing also links naturally to your multigrid discussion."
-  },
-  {
-   "authors": "Authors not retrieved — see paper",
-   "date": "2026-10",
-   "hasAbstract": false,
-   "relevance": 4,
-   "summary": {
-    "method": "From the title: an interface reconstruction that uses circular arcs and cusps so sharp features are kept instead of smoothed away.",
-    "problem": "Title only — abstract not available.",
-    "result": "Open the paper to see results."
-   },
-   "tags": [
-    "VOF / PLIC",
-    "Interface reconstruction"
-   ],
-   "title": "Feature-preserving interface reconstruction using piecewise circles and cusps",
-   "url": "https://arxiv.org/abs/2610.41305",
-   "venue": "arXiv 2610.41305",
-   "why": "Sharp corners are exactly what appear where the free surface meets a moving solid at the contact line; check whether its cusp handling could help your three-phase reconstruction cases."
-  },
-  {
-   "title": "Accelerating Matrix-Free Fast Diagonalization and Preconditioned Linear Solvers for High-Order Finite Element Discretized Elliptic Problems on Distributed GPUs",
-   "authors": "G. Panigrahi, P. Motamarri",
-   "venue": "arXiv preprint",
-   "date": "2026-10-31",
-   "url": "https://arxiv.org/abs/2611.14041",
-   "tags": [
-    "Poisson solver",
-    "Multigrid",
-    "Preconditioning"
-   ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "High-order finite element elliptic solves on distributed GPUs need both fewer iterations and cheaper iterations.",
-    "method": "A distributed fast-diagonalization direct Poisson solver is combined with two matrix-free CG preconditioners: p-multigrid with Chebyshev–Jacobi smoothing and a two-level hybrid Schwarz method.",
-    "result": "The direct solver is 100–1000× faster than Jacobi-preconditioned CG on uniform meshes, and hybrid Schwarz converges in 11 iterations on an octree generalized Poisson problem from 8 to 1024 MI250X GPUs."
-   },
-   "why": "Useful benchmark numbers for the preconditioning part of your Poisson note; the generalized (variable-coefficient) octree case is the nearest to a density-jump pressure equation."
-  },
-  {
-   "title": "Influence of Droplet Morphology on Fluid Dynamics and Impact Erosion of Wind Turbine Blades",
-   "authors": "H. Hao, A. Sergis, M. N. Charalambides",
-   "venue": "arXiv preprint",
-   "date": "2026-10",
-   "url": "https://arxiv.org/abs/2610.23178",
-   "tags": [
-    "Droplet impact",
-    "FSI",
-    "VOF"
-   ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Erosion models for wind turbine blades assume spherical droplets hitting at normal incidence, which rarely happens.",
-    "method": "Incompressible VOF multiphase simulations are coupled with finite element analysis of the blade material in a fluid-structure interaction model.",
-    "result": "Peak impact pressure, influential area and peak force are positively correlated while time of peak force scales inversely; a scaling law based on droplet projection area is proposed (no numbers in the abstract)."
-   },
-   "why": "A VOF-to-FE partitioned coupling example for impact loading; a handy contrast case for the FSI coupling section of your review, though the solid is fixed rather than moving."
-  },
-  {
-   "title": "Droplet-triggered Faraday waves in a vertically forced bath",
-   "authors": "F. T. Mahmood, C. R. Constante-Amores",
-   "venue": "arXiv preprint",
-   "date": "2026-10",
-   "url": "https://arxiv.org/abs/2610.05596",
-   "tags": [
-    "Droplet dynamics",
-    "DNS"
-   ],
-   "relevance": 3,
-   "hasAbstract": true,
-   "summary": {
-    "problem": "Repeated droplet impacts can trigger a growing Faraday-wave response even when the undisturbed bath is linearly stable.",
-    "method": "Axisymmetric two-phase DNS over a wide range of Reynolds and Weber numbers, supported by Floquet analysis and a Bessel decomposition of the bath response.",
-    "result": "The switch to the unstable-bath regime happens over a comparatively narrow Weber-number range and depends only weakly on Reynolds number (no numbers in the abstract)."
-   },
-   "why": "Shows how impact-driven capillary waves near the air film evolve on a deforming pool; a good reference for droplet/bubble dynamics framing in job talks."
-  }
- ]
+  "generated": "2026-11-19",
+  "window": "Papers published since 5 Oct 2026 (four strong items kept from yesterday)",
+  "note": "Summaries are written by Claude from each paper's abstract. Items marked 'title only' had no abstract available — open the paper before relying on them.",
+  "items": [
+    {
+      "title": "Consistent interfacial flow numerics - Part II: The momentum convection term",
+      "authors": "J. Roenby",
+      "venue": "arXiv 2611.24866",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.24866",
+      "tags": [
+        "VOF / PLIC",
+        "Density jump",
+        "Momentum consistency"
+      ],
+      "relevance": 5,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a study of how to discretize the momentum convection term so it stays consistent with the VOF interface transport (22 pages; code released).",
+        "result": "Open the paper to see results."
+      },
+      "why": "This is your proposal's second requirement, conservative transport across density jumps, from the isoAdvector/plicRDF author. Compare its mass–momentum consistency fix with how your solver advects momentum next to the air film at a 1000:1 density ratio."
+    },
+    {
+      "title": "Consistent interfacial flow numerics - Part I: The gravity force term",
+      "authors": "J. Roenby, K. Missios, K. Møller et al.",
+      "venue": "arXiv 2611.24841",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.24841",
+      "tags": [
+        "VOF / PLIC",
+        "Spurious currents",
+        "OpenFOAM"
+      ],
+      "relevance": 5,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: how the gravity body-force term should be discretized consistently with the interface and pressure so it does not create spurious velocities (code released).",
+        "result": "Open the paper to see results."
+      },
+      "why": "Gravity/pressure imbalance at a density jump is a classic source of parasitic currents in water-entry runs; useful for your spurious-current section and for OpenFOAM validation choices."
+    },
+    {
+      "title": "Solver-consistent learned curvature for algebraic volume-of-fluid simulations of rising bubbles: symmetry-preserving networks, closed-loop data aggregation and a posteriori benchmarks",
+      "authors": "P. Tayerani, M. Mousavi",
+      "venue": "arXiv 2611.20175",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.20175",
+      "tags": [
+        "ML for interfaces",
+        "Curvature",
+        "VOF"
+      ],
+      "relevance": 5,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a neural-network curvature estimator for algebraic VOF that respects symmetries and is trained in closed loop with the solver, then tested a posteriori on rising bubbles.",
+        "result": "Open the paper to see results."
+      },
+      "why": "The closest new relative of PLIC-Net: the 'closed-loop data aggregation' idea (training on states the coupled solver actually produces) is a direct answer to the a-priori vs a-posteriori gap you will face when PLIC-Net runs inside a full simulation."
+    },
+    {
+      "authors": "Authors not listed in the journal feed",
+      "date": "2026-11-10",
+      "hasAbstract": true,
+      "relevance": 5,
+      "summary": {
+        "method": "The authors keep the sign in a modified formulation and test both versions in volume-of-fluid simulations of droplet impact and bubble coalescence.",
+        "problem": "The common Kistler dynamic contact-angle implementation uses the magnitude of the capillary number, so it loses the sign that distinguishes advancing from receding contact lines.",
+        "result": "The magnitude-based model mispredicts droplet recoil and suppresses bubble detachment, while the corrected model captures both."
+      },
+      "tags": [
+        "Contact line",
+        "VOF"
+      ],
+      "title": "Correcting a capillary-number sign pitfall in Kistler dynamic contact-angle modeling",
+      "url": "https://doi.org/10.1063/5.0360838",
+      "venue": "Physics of Fluids",
+      "why": "Directly relevant to the contact angle on a moving solid in your proposal: during water entry the contact line on the sphere both advances and recedes, so check whether your Kistler/Cox–Voinov implementation keeps the sign of Ca."
+    },
+    {
+      "authors": "H. Wu, H. Qi, Y. Zhang et al.",
+      "date": "2026-11-03",
+      "hasAbstract": true,
+      "relevance": 5,
+      "summary": {
+        "method": "Water-entry experiments over a range of cylinder temperatures, entry speeds and diameters, with cavity shapes reconstructed from high-speed images using a Logvinovich-type model.",
+        "problem": "How does heating a cylinder change the air cavity it opens when it enters water at high speed?",
+        "result": "A hotter cylinder generally made the cavity grow longer along its axis and delayed pinch-off, while maximum cavity diameter and pinch-off depth changed little (the abstract gives no numbers)."
+      },
+      "tags": [
+        "Water entry",
+        "Cavity"
+      ],
+      "title": "Experimental study of thermally induced cavity evolution and periodic layered cavities during water entry of heated cylinders",
+      "url": "https://doi.org/10.1063/5.0349968",
+      "venue": "Physics of Fluids 38(11), 117407",
+      "why": "Heating changes the gas layer and effective wetting at the moving solid, so this is a fresh experimental data set for your proposal's 'contact angle on a moving solid' and 'sub-cell gas layer' requirements, and a possible validation target for the air film in your solver."
+    },
+    {
+      "authors": "K. Suresh",
+      "date": "2026-11-02",
+      "hasAbstract": true,
+      "relevance": 5,
+      "summary": {
+        "method": "The closed-form inverse square root of the homogeneous operator is folded into the finite element factors so the preconditioned operator has subnormalization one, and QSVT block-encodes its inverse.",
+        "problem": "Quantum linear solvers slow down under mesh refinement because the finite element stiffness matrix of a two-phase conduction problem has a condition number that grows quadratically with elements per side.",
+        "result": "On three periodic cells with up to 10^6 unknowns the condition number stayed mesh-independent, and Qiskit state-vector runs on 4×4 and 8×8 meshes matched the classical solution within the polynomial tolerance."
+      },
+      "tags": [
+        "Quantum solvers",
+        "Conditioning",
+        "Two-phase"
+      ],
+      "title": "A Preconditioned Quantum Linear Solver for Periodic Two-Phase Heat Conduction with Mesh-Independent Condition Number",
+      "url": "https://arxiv.org/abs/2610.41690",
+      "venue": "arXiv preprint",
+      "why": "This is the exact obstacle in your quantum pressure solver study and Poisson condition-number note: a two-phase coefficient jump plus mesh refinement drives kappa up. Check whether the homogeneous-operator preconditioning idea survives a 1000:1 density ratio in the variable-density pressure Poisson equation."
+    },
+    {
+      "authors": "Authors not retrieved — see paper",
+      "date": "2026-11",
+      "hasAbstract": false,
+      "relevance": 5,
+      "summary": {
+        "method": "From the title: a quadratic (curved) interface reconstruction for VOF, paired with a geometric way to extend velocity off the interface.",
+        "problem": "Title only — abstract not available.",
+        "result": "Open the paper to see results."
+      },
+      "tags": [
+        "VOF / PLIC",
+        "Curvature"
+      ],
+      "title": "Parametrised-Quadratic Interface Reconstruction and Geometric Velocity Extension in the Volume-of-Fluid Framework",
+      "url": "https://arxiv.org/abs/2611.20802",
+      "venue": "arXiv 2611.20802",
+      "why": "A direct step beyond PLIC: worth comparing against PLIC-Net and your curvature / spurious-current tests, since curved reconstruction is the usual answer to PLIC's curvature error."
+    },
+    {
+      "title": "Stokes flow in a wedge with a moving contact point: well-posedness with a fixed contact angle and Navier slip",
+      "authors": "M. V. Gnann, H. Knüpfer, K. M. Lam et al.",
+      "venue": "arXiv 2611.22008",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.22008",
+      "tags": [
+        "Contact line",
+        "Navier slip",
+        "Theory"
+      ],
+      "relevance": 4,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a mathematical proof that Stokes flow near a moving contact point is well-posed when the contact angle is fixed and the wall has Navier slip (172 pages).",
+        "result": "Open the paper to see results."
+      },
+      "why": "Gives rigorous backing for the slip-regularized contact line your review discusses under Cox–Voinov and mesh dependence; a good citation when you justify a Navier-slip condition on the moving solid."
+    },
+    {
+      "title": "A curvature-corrected port-Hamiltonian reduced-order model for dissipative sloshing with contact-line hysteresis in low-gravity tanks",
+      "authors": "G. Cassoni, F. Gennari, J. Serafini et al.",
+      "venue": "arXiv 2611.24736",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.24736",
+      "tags": [
+        "Contact line",
+        "Hysteresis",
+        "Reduced-order model"
+      ],
+      "relevance": 4,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a reduced-order sloshing model that includes contact-line hysteresis and a curvature correction, for tanks in low gravity.",
+        "result": "Open the paper to see results."
+      },
+      "why": "A compact way to represent pinning and hysteresis energy loss; worth a look for the hysteresis part of your contact-line section and as a contrast to full CFD treatments."
+    },
+    {
+      "title": "Wake-Powered Spreading of Encapsulated Drops Impacting Under Liquid",
+      "authors": "T.-Y. Zhang, S. K. Mitra",
+      "venue": "arXiv 2611.20340",
+      "date": "2026-11-17",
+      "url": "https://arxiv.org/abs/2611.20340",
+      "tags": [
+        "Droplet impact",
+        "Wetting"
+      ],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Drop-spreading models assume the drop's own kinetic energy drives spreading, which fails when the wall sits under another liquid.",
+        "method": "Millimetric oil drops, bare or coated with a thin silicone-oil shell, were dropped onto a glass wall under water and analysed with a two-stage energy balance.",
+        "result": "The drops spread to more than twice their diameter, and over 90% of the spreading energy came from the wake rather than the drop itself."
+      },
+      "why": "A clean example of the surrounding fluid (not the impactor) controlling wetting during impact, which parallels how the air layer shapes the contact line on a body entering water."
+    },
+    {
+      "title": "PANDA-D: Interface-free determination of two dynamic contact angles from molecular-density and center-of-mass profiles",
+      "authors": "G. K. Vandyshev, G. S. Gorkaev, N. D. Kondratyuk",
+      "venue": "arXiv 2610.21996",
+      "date": "2026-10",
+      "url": "https://arxiv.org/abs/2610.21996",
+      "tags": [
+        "Dynamic contact angle",
+        "Molecular dynamics"
+      ],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "Measuring contact angles in molecular dynamics depends on arbitrary density thresholds, and a density profile alone cannot tell which meniscus is advancing and which is receding.",
+        "method": "The density profile and layer-by-layer centre-of-mass displacement are fitted together with a circular-meniscus model, giving both angles without extracting an interface.",
+        "result": "On synthetic cases with known angles the error was 0.29° RMS, and estimates agreed with independent circle fits to 0.84° RMS over 167 angles."
+      },
+      "why": "Advancing-vs-receding separation is exactly the issue on a moving solid; a source of microscale dynamic-angle data for calibrating the contact-angle rule in your proposal."
+    },
+    {
+      "title": "Probabilistic Simulation of Gas-Liquid Interfaces with Coupled Flow Matching on Spherical Harmonics",
+      "authors": "K. Bennema ten Brinke, R. Ramesh, D. Orij et al.",
+      "venue": "arXiv 2610.16327",
+      "date": "2026-10",
+      "url": "https://arxiv.org/abs/2610.16327",
+      "tags": [
+        "ML for interfaces",
+        "Bubbles",
+        "Generative models"
+      ],
+      "relevance": 3,
+      "hasAbstract": true,
+      "summary": {
+        "problem": "High-fidelity simulation of swarms of deformable bubbles is expensive, and the dynamics are nonlinear and chaotic.",
+        "method": "A neural surrogate forecasts bubble paths and interface shapes together in a spherical-harmonic representation, using generative flow matching to predict whole future windows at once.",
+        "result": "It reproduces key flow statistics and runs several orders of magnitude faster than the DNS solver it learns from."
+      },
+      "why": "A different ML route from PLIC-Net: learn compact shape coefficients instead of cell-level reconstruction. Good framing material for the ML part of a job talk."
+    },
+    {
+      "title": "A variational multiscale rotational pressure-correction method for incompressible flows with open boundaries",
+      "authors": "P. Wu, C. Zhu",
+      "venue": "arXiv 2611.22600",
+      "date": "2026-11",
+      "url": "https://arxiv.org/abs/2611.22600",
+      "tags": [
+        "Projection method",
+        "Pressure Poisson"
+      ],
+      "relevance": 3,
+      "hasAbstract": false,
+      "summary": {
+        "problem": "Title only — abstract not available.",
+        "method": "From the title: a rotational pressure-correction (projection) scheme combined with variational multiscale stabilization, aimed at open-boundary flows.",
+        "result": "Open the paper to see results."
+      },
+      "why": "Rotational projection reduces the pressure boundary-layer error; a reference point for the projection-method part of your Poisson note, though it is single-phase."
+    }
+  ]
 }
